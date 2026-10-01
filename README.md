@@ -1,136 +1,158 @@
 # HubSci — Online Learning Platform
 
-HubSci is a full-stack online learning platform built with **ASP.NET Core MVC** and **SQL Server**. The platform provides role-based learning management for students, instructors, and administrators, including course enrollment, quizzes, progress tracking, certificates, feedback, and payment verification through InstaPay.
+> A full-stack online learning platform built with ASP.NET Core MVC, .NET 9, Entity Framework Core, and SQL Server.
+
+### 🔗 Links
+
+* **Live Demo:** http://hubsci.runasp.net/
+* **GitHub:** https://github.com/HamdySameh55/hubsci
+
+---
+
+## 📌 Overview
+
+HubSci is a web-based online learning platform that provides a complete learning workflow for **Students, Instructors, and Administrators**.
+
+The platform supports course management, enrollment, lessons, quizzes, progress tracking, certificates, student feedback, and InstaPay payment-proof verification.
+
+---
 
 ## 🚀 Features
 
-* **Role-Based Access Control**
+### 👨‍🎓 Student
 
-  * Student
-  * Instructor
-  * Admin
+* Browse available courses
+* Enroll in free and paid courses
+* Upload InstaPay payment proof for paid courses
+* Access enrolled courses
+* Study modules and lessons
+* Take module quizzes
+* Track learning progress
+* Receive certificates after completing course requirements
+* Submit course feedback after completion
 
-* **Authentication & Authorization**
+### 👨‍🏫 Instructor
 
-  * Custom Cookie Authentication
-  * Secure password hashing
-  * Role-based access control
+* Create and manage courses
+* Create modules and lessons
+* Add module quizzes
+* Review student enrollments
+* Verify InstaPay payment proofs
+* Monitor course-related activities
 
-* **Course Management**
+### 👨‍💼 Admin
 
-  * Course creation and management
-  * Free and paid courses
-  * Course modules and lessons
-  * Ordered learning content
+* Administrative access
+* User management
+* Platform management
+* Automatic admin account seeding
 
-* **Enrollment & Payments**
-
-  * Course enrollment workflow
-  * Pending/active enrollment states
-  * InstaPay payment proof upload
-  * Instructor payment verification
-  * File type and size validation for uploaded proofs
-
-* **Quizzes & Learning Progress**
-
-  * Module-based quizzes
-  * Passing score validation
-  * Attempt restrictions
-  * Lesson completion tracking
-  * Progress calculation
-
-* **Certificates**
-
-  * Certificate eligibility after completing course requirements
-
-* **Feedback**
-
-  * Students can submit feedback after completing a course
-
-* **Administration**
-
-  * Admin account seeding
-  * User and platform management
+---
 
 ## 🏗️ Architecture
 
-The project follows a **4-layer architecture**:
+HubSci follows a **4-layer architecture**:
 
 ```text
-OnlineLearning.Web
-        │
-        ▼
-OnlineLearning.Business
-        │
-        ▼
-OnlineLearning.Data
-        │
-        ▼
-OnlineLearning.Domain
+┌─────────────────────────────┐
+│     OnlineLearning.Web      │
+│ Controllers / Views / UI    │
+└──────────────┬──────────────┘
+               │
+┌──────────────▼──────────────┐
+│   OnlineLearning.Business   │
+│ Services / DTOs / Logic     │
+└──────────────┬──────────────┘
+               │
+┌──────────────▼──────────────┐
+│     OnlineLearning.Data     │
+│ EF Core / Repositories / DB │
+└──────────────┬──────────────┘
+               │
+┌──────────────▼──────────────┐
+│    OnlineLearning.Domain    │
+│         Entities            │
+└─────────────────────────────┘
 ```
 
-### Projects
+### Layer Responsibilities
 
-| Project                   | Responsibility                                               |
-| ------------------------- | ------------------------------------------------------------ |
-| `OnlineLearning.Domain`   | Domain entities and core models                              |
-| `OnlineLearning.Data`     | EF Core, DbContext, configurations, migrations, repositories |
-| `OnlineLearning.Business` | Business logic, services, DTOs                               |
-| `OnlineLearning.Web`      | ASP.NET Core MVC controllers, views, authentication, and UI  |
+| Layer        | Responsibility                                               |
+| ------------ | ------------------------------------------------------------ |
+| **Domain**   | Entities and domain models                                   |
+| **Data**     | EF Core, DbContext, configurations, migrations, repositories |
+| **Business** | Services, DTOs, and business logic                           |
+| **Web**      | MVC controllers, views, authentication, and UI               |
+
+---
 
 ## 🛠️ Technologies
 
-* **C#**
-* **ASP.NET Core MVC**
-* **.NET 9**
-* **Entity Framework Core 9.0.13**
-* **SQL Server**
-* **LINQ**
-* **RESTful architecture**
-* **Dependency Injection**
-* **Repository Pattern**
-* **DTO Pattern**
-* **Cookie Authentication**
-* **Role-Based Authorization**
-* **Bootstrap**
-* **JavaScript**
-* **HTML5 / CSS3**
+* C#
+* .NET 9
+* ASP.NET Core MVC
+* Entity Framework Core 9.0.13
+* SQL Server
+* LINQ
+* Dependency Injection
+* Repository Pattern
+* Service Layer
+* DTO Pattern
+* Cookie Authentication
+* Role-Based Authorization
+* Bootstrap
+* JavaScript
+* HTML5
+* CSS3
 
-## 🔐 Security
+---
 
-The application implements:
+## 🔐 Authentication & Security
+
+The application uses **custom Cookie Authentication** instead of ASP.NET Identity.
+
+Implemented security features include:
 
 * Cookie-based authentication
 * Role-based authorization
 * Password hashing using `PasswordHasher<User>`
-* Protected admin functionality
-* Validation of payment proof uploads
+* Protected administrative functionality
 * User Secrets for sensitive configuration
+* Payment proof file validation
 * Restricted access to uploaded payment proofs
 
-Sensitive configuration such as database connection strings and administrator credentials is **not stored in source control**.
+Sensitive credentials and database connection strings are not stored in the repository.
+
+---
 
 ## 💳 Payment Workflow
 
-HubSci uses an InstaPay-based payment verification workflow instead of an automated payment gateway.
+HubSci implements an InstaPay-based payment verification workflow.
 
 ```text
 Student
    │
-   │ Enroll in paid course
    ▼
-Payment Required
+Enroll in Paid Course
    │
-   │ Upload InstaPay proof
    ▼
-Instructor Verification
+Upload Payment Proof
    │
-   ├── Approved ──► Enrollment Activated
+   ▼
+Instructor Reviews Proof
    │
-   └── Rejected ──► Payment Review Required
+   ├───────────────┐
+   │               │
+Approved        Rejected
+   │               │
+   ▼               ▼
+Enrollment       Payment
+Activated        Review Required
 ```
 
 Free courses bypass the payment verification process.
+
+---
 
 ## 📚 Learning Workflow
 
@@ -152,72 +174,29 @@ Certificate Eligibility
 Submit Feedback
 ```
 
-## 🗄️ Database
+---
+
+## 🗄️ Database & Data Access
 
 The application uses **SQL Server** with **Entity Framework Core**.
 
-EF Core is responsible for:
+EF Core is used for:
 
 * Database access
 * Entity relationships
 * Fluent API configurations
-* Migrations
-* Repository data access
+* Database migrations
+* Repository-based data access
 
-The `ApplicationDbContext` loads entity configurations automatically using:
+Entity configurations are automatically loaded through:
 
 ```csharp
-ApplyConfigurationsFromAssembly(...)
+modelBuilder.ApplyConfigurationsFromAssembly(
+    typeof(ApplicationDbContext).Assembly
+);
 ```
 
-## ⚙️ Getting Started
-
-### Prerequisites
-
-* .NET 9 SDK
-* SQL Server
-* Entity Framework Core CLI tools
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/HamdySameh55/hubsci.git
-cd hubsci
-```
-
-### Configure User Secrets
-
-The application requires:
-
-```bash
-dotnet user-secrets set "Admin:Email" "<admin-email>" --project OnlineLearning.Web
-
-dotnet user-secrets set "Admin:Password" "<admin-password>" --project OnlineLearning.Web
-
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<connection-string>" --project OnlineLearning.Web
-```
-
-### Apply Database Migrations
-
-```bash
-dotnet ef database update \
-  --project OnlineLearning.Data \
-  --startup-project OnlineLearning.Web
-```
-
-### Build the Solution
-
-```bash
-dotnet build OnlineLearning.sln
-```
-
-### Run the Application
-
-```bash
-dotnet run --project OnlineLearning.Web --launch-profile http
-```
-
-The application will be available locally through the configured HTTP launch profile.
+---
 
 ## 📁 Project Structure
 
@@ -248,23 +227,78 @@ OnlineLearning/
 └── OnlineLearning.sln
 ```
 
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+
+* .NET 9 SDK
+* SQL Server
+* Entity Framework Core CLI
+
+### Clone
+
+```bash
+git clone https://github.com/HamdySameh55/hubsci.git
+cd hubsci
+```
+
+### Configure User Secrets
+
+```bash
+dotnet user-secrets set "Admin:Email" "<admin-email>" --project OnlineLearning.Web
+
+dotnet user-secrets set "Admin:Password" "<admin-password>" --project OnlineLearning.Web
+
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<connection-string>" --project OnlineLearning.Web
+```
+
+### Apply Database Migrations
+
+```bash
+dotnet ef database update --project OnlineLearning.Data --startup-project OnlineLearning.Web
+```
+
+### Build
+
+```bash
+dotnet build OnlineLearning.sln
+```
+
+### Run
+
+```bash
+dotnet run --project OnlineLearning.Web --launch-profile http
+```
+
+---
+
 ## 🎯 Project Highlights
 
-* Designed and implemented a layered ASP.NET Core MVC architecture.
-* Implemented custom authentication and role-based authorization without ASP.NET Identity.
-* Applied Entity Framework Core with repository and service layers.
-* Implemented course enrollment, learning progress, quizzes, certificates, and feedback workflows.
-* Implemented InstaPay payment proof verification.
-* Used DTOs to separate business-layer data from domain entities.
-* Applied Dependency Injection throughout the application.
-* Managed database schema changes using EF Core migrations.
+* Built a complete online learning platform using **ASP.NET Core MVC and .NET 9**.
+* Designed a **4-layer architecture** separating Domain, Data, Business, and Web responsibilities.
+* Implemented **custom Cookie Authentication and role-based authorization** for three user roles.
+* Applied **Repository Pattern, Service Layer, DTOs, and Dependency Injection**.
+* Implemented course enrollment, quizzes, progress tracking, certificates, and student feedback.
+* Developed an **InstaPay payment-proof verification workflow** for paid courses.
+* Used **Entity Framework Core migrations and SQL Server** for database management.
+* Deployed the application as a live web application.
+
+---
+
+## 🌐 Live Application
+
+**Try HubSci:**
+http://hubsci.runasp.net/
+
+---
 
 ## 👨‍💻 Author
 
-**Hamdy Sameh**
+### Hamdy Sameh
 
 Computer Science Student & .NET Backend Developer
 
-* GitHub: [HamdySameh55](https://github.com/HamdySameh55)
-* Repository: [HubSci](https://github.com/HamdySameh55/hubsci)
-
+* GitHub: https://github.com/HamdySameh55
+* Project: https://github.com/HamdySameh55/hubsci
