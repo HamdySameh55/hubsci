@@ -1,0 +1,317 @@
+@model OnlineLearning.Business.DTOs.CreateFeedbackDto
+
+@{
+    ViewData["Title"] = "Edit Feedback";
+}
+
+<style>
+    body {
+        background-color: #FAF7F2;
+    }
+
+    .back-link {
+        color: #7C3AED;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: #5B21B6;
+    }
+
+    .feedback-form-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(24, 24, 27, 0.05);
+        overflow: hidden;
+    }
+
+    .feedback-card-header {
+        padding: 28px 30px 22px;
+        border-bottom: 1px solid #E4E4E7;
+    }
+
+    .feedback-card-body {
+        padding: 30px;
+    }
+
+    .feedback-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 16px;
+    }
+
+    .section-label {
+        color: #7C3AED;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+    }
+
+    .page-title {
+        color: #18181B;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .page-description {
+        color: #71717A;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+
+    .custom-input {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+    }
+
+    .custom-input:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .custom-help {
+        color: #71717A;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-light-custom {
+        background: #EDE9FE;
+        border: 1px solid #EDE9FE;
+        color: #5B21B6;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-light-custom:hover {
+        background: #DDD6FE;
+        border-color: #DDD6FE;
+        color: #5B21B6;
+    }
+
+    .custom-alert {
+        border-radius: 12px;
+        border: 1px solid;
+        padding: 14px 16px;
+        font-weight: 500;
+    }
+
+    .error-alert {
+        background: #FEF2F2;
+        border-color: #FECACA;
+        color: #991B1B;
+    }
+
+    .alert-icon {
+        margin-right: 8px;
+        font-weight: 700;
+    }
+</style>
+
+<div class="container py-5">
+
+    <div class="mb-4">
+
+        <a asp-controller="Feedback"
+           asp-action="Index"
+           class="back-link">
+
+            ← Back to My Feedback
+
+        </a>
+
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-9 col-lg-7">
+
+            <div class="mb-4">
+
+                <div class="section-label">
+                    COURSE FEEDBACK
+                </div>
+
+                <h1 class="page-title">
+                    Edit Feedback
+                </h1>
+
+                <p class="page-description">
+                    Update your feedback. After editing, it will be
+                    sent for review again.
+                </p>
+
+            </div>
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="custom-alert error-alert mb-4">
+
+                    <span class="alert-icon">
+                        !
+                    </span>
+
+                    @TempData["Error"]
+
+                </div>
+            }
+
+            <div class="feedback-form-card">
+
+                <div class="feedback-card-header">
+
+                    <div class="feedback-icon">
+                        ✎
+                    </div>
+
+                    <h5 class="fw-bold mb-1">
+                        Update Your Feedback
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Share your updated rating and experience.
+                    </p>
+
+                </div>
+
+                <div class="feedback-card-body">
+
+                    <form asp-action="Edit"
+                          asp-route-id="@ViewContext.RouteData.Values["id"]"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               asp-for="CourseId" />
+
+                        <div class="mb-4">
+
+                            <label asp-for="Rating"
+                                   class="form-label fw-semibold">
+                                Rating
+                            </label>
+
+                            <select asp-for="Rating"
+                                    class="form-select custom-input">
+
+                                <option value="0">
+                                    No rating
+                                </option>
+
+                                <option value="1">
+                                    1 / 5
+                                </option>
+
+                                <option value="2">
+                                    2 / 5
+                                </option>
+
+                                <option value="3">
+                                    3 / 5
+                                </option>
+
+                                <option value="4">
+                                    4 / 5
+                                </option>
+
+                                <option value="5">
+                                    5 / 5
+                                </option>
+
+                            </select>
+
+                            <div class="custom-help">
+                                Rating is optional.
+                            </div>
+
+                            <span asp-validation-for="Rating"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Comment"
+                                   class="form-label fw-semibold">
+                                Comment
+                            </label>
+
+                            <textarea asp-for="Comment"
+                                      class="form-control custom-input"
+                                      rows="6"
+                                      maxlength="1000"
+                                      placeholder="Tell us about your experience with this course..."></textarea>
+
+                            <div class="custom-help">
+                                At least a rating or a comment is required.
+                            </div>
+
+                            <span asp-validation-for="Comment"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+
+                            <a asp-controller="Feedback"
+                               asp-action="Index"
+                               class="btn btn-light-custom">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-purple flex-grow-1">
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

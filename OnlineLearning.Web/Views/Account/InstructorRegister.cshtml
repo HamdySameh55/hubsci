@@ -1,0 +1,240 @@
+
+@model OnlineLearning.Business.DTOs.RegisterDto
+
+@{
+    ViewData["Title"] = "Instructor Register";
+}
+
+<style>
+    .instructor-register-page {
+        background: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .register-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+    }
+
+    .page-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+
+    .form-label {
+        color: #18181B;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+    }
+
+    .form-control:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 20px;
+    }
+
+    .btn-outline-purple:hover {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .instructor-note {
+        background: #EDE9FE;
+        border: 1px solid #DDD6FE;
+        color: #5B21B6;
+        border-radius: 12px;
+        padding: 13px 15px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .validation-message {
+        font-size: 13px;
+    }
+</style>
+
+<div class="instructor-register-page py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="register-card shadow-sm p-4 p-md-5">
+
+                    <!-- Header -->
+                    <div class="d-flex align-items-center gap-3 mb-4">
+
+                        <div class="page-icon">
+                            👨‍🏫
+                        </div>
+
+                        <div>
+                            <h2 class="fw-bold mb-1"
+                                style="color: #18181B;">
+                                Instructor Register
+                            </h2>
+
+                            <p class="mb-0"
+                               style="color: #71717A;">
+                                Create your instructor account.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Form -->
+                    <form asp-action="InstructorRegister"
+                          method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger validation-message mb-4">
+                        </div>
+
+
+                        <!-- Name -->
+                        <div class="mb-4">
+
+                            <label asp-for="Name"
+                                   class="form-label">
+                                Full Name
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   placeholder="Enter your full name" />
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="mb-4">
+
+                            <label asp-for="Email"
+                                   class="form-label">
+                                Email
+                            </label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="Enter your email" />
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="mb-4">
+
+                            <label asp-for="Password"
+                                   class="form-label">
+                                Password
+                            </label>
+
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control"
+                                   placeholder="Create a password" />
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Instructor Note -->
+                        <div class="instructor-note mb-4">
+
+                            <strong>Instructor Account</strong>
+
+                            <div>
+                                This account will be registered with the
+                                Instructor role.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-purple">
+                                Create Instructor Account
+                            </button>
+
+                            <a asp-action="Login"
+                               class="btn btn-outline-purple">
+                                Back to Login
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

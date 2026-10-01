@@ -1,0 +1,192 @@
+
+@model IEnumerable<OnlineLearning.Business.DTOs.UserDto>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1" style="color: #18181B;">
+                User Management
+            </h1>
+
+            <p class="mb-0" style="color: #71717A;">
+                View and manage users on the platform.
+            </p>
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Dashboard"
+           class="btn"
+           style="
+               background-color: #EDE9FE;
+               color: #5B21B6;
+               border: 1px solid #DDD6FE;
+           ">
+            ← Dashboard
+        </a>
+    </div>
+
+
+    <!-- Delete Error Message -->
+    @if (TempData["DeleteError"] != null)
+    {
+        <div class="alert alert-warning border-0 shadow-sm mb-4"
+             style="
+                 border-radius: 12px;
+                 background-color: #FEF3C7;
+                 color: #92400E;
+             ">
+            @TempData["DeleteError"]
+        </div>
+    }
+
+
+    <!-- Users Card -->
+    <div class="card border-0 shadow-sm"
+         style="
+             border-radius: 18px;
+             background-color: #FFFFFF;
+         ">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0">
+
+                    <thead>
+                        <tr style="
+                            background-color: #F5F3FF;
+                            color: #52525B;
+                        ">
+                            <th class="px-4 py-3">
+                                ID
+                            </th>
+
+                            <th class="py-3">
+                                Name
+                            </th>
+
+                            <th class="py-3">
+                                Email
+                            </th>
+
+                            <th class="py-3">
+                                Role
+                            </th>
+
+                            <th class="py-3 text-end px-4">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+
+                                <td class="px-4">
+                                    @user.UserId
+                                </td>
+
+                                <td>
+                                    <span class="fw-semibold"
+                                          style="color: #18181B;">
+                                        @user.Name
+                                    </span>
+                                </td>
+
+                                <td style="color: #52525B;">
+                                    @user.Email
+                                </td>
+
+                                <td>
+
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="badge rounded-pill"
+                                              style="
+                                                  background-color: #EDE9FE;
+                                                  color: #5B21B6;
+                                              ">
+                                            Admin
+                                        </span>
+                                    }
+                                    else if (user.Role == "Instructor")
+                                    {
+                                        <span class="badge rounded-pill"
+                                              style="
+                                                  background-color: #FEF3C7;
+                                                  color: #92400E;
+                                              ">
+                                            Instructor
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill"
+                                              style="
+                                                  background-color: #F4F4F5;
+                                                  color: #52525B;
+                                              ">
+                                            Student
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="text-end px-4">
+
+                                    @if (user.Role != "Admin")
+                                    {
+                                        <form asp-controller="User"
+                                              asp-action="Delete"
+                                              asp-route-id="@user.UserId"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this user?');">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-sm"
+                                                    style="
+                                                        background-color: #FEE2E2;
+                                                        color: #B91C1C;
+                                                    ">
+                                                Delete
+                                            </button>
+
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #A1A1AA;">
+                                            Protected
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

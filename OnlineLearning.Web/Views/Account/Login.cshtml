@@ -1,0 +1,549 @@
+
+@model OnlineLearning.Business.DTOs.LoginDto
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+
+    /* ================================
+       LOGIN PAGE
+    ================================= */
+
+    .login-page {
+        background-color: #FAF7F2;
+        overflow: hidden;
+    }
+
+
+    /* ================================
+       CARD ANIMATION
+    ================================= */
+
+    .login-card {
+        opacity: 0;
+        transform: translateY(35px) scale(0.98);
+        animation: loginCardIn 0.8s ease forwards;
+    }
+
+    @@keyframes loginCardIn {
+        0% {
+            opacity: 0;
+            transform: translateY(35px) scale(0.98);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+
+    /* ================================
+       LOGO
+    ================================= */
+
+    .brand-mark {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        opacity: 0;
+        transform: translateY(-15px) scale(0.9);
+
+        animation: logoIn 0.7s ease 0.25s forwards;
+    }
+
+    .brand-mark img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+
+        animation: logoFloat 4s ease-in-out 1s infinite;
+    }
+
+    .brand-mark-fallback {
+        width: 90px;
+        height: 90px;
+
+        display: none;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 24px;
+
+        background-color: #EDE9FE;
+        color: #7C3AED;
+
+        font-size: 1.7rem;
+        font-weight: 800;
+    }
+
+    @@keyframes logoIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-15px) scale(0.9);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @@keyframes logoFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+
+
+    /* ================================
+       TEXT ANIMATION
+    ================================= */
+
+    .login-title {
+        opacity: 0;
+        transform: translateY(15px);
+        animation: textIn 0.6s ease 0.4s forwards;
+    }
+
+    .login-subtitle {
+        opacity: 0;
+        transform: translateY(15px);
+        animation: textIn 0.6s ease 0.5s forwards;
+    }
+
+    @@keyframes textIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* ================================
+       FORM ELEMENTS
+    ================================= */
+
+    .form-item {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    .form-item-email {
+        animation: formItemIn 0.6s ease 0.6s forwards;
+    }
+
+    .form-item-password {
+        animation: formItemIn 0.6s ease 0.7s forwards;
+    }
+
+    .form-button {
+        opacity: 0;
+        transform: translateY(15px);
+        animation: formItemIn 0.6s ease 0.8s forwards;
+    }
+
+    .form-divider {
+        opacity: 0;
+        animation: fadeIn 0.6s ease 0.95s forwards;
+    }
+
+    .register-section {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: formItemIn 0.6s ease 1s forwards;
+    }
+
+    @@keyframes formItemIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+
+    /* ================================
+       INPUTS
+    ================================= */
+
+    .login-input {
+        transition:
+            border-color 0.25s ease,
+            box-shadow 0.25s ease,
+            transform 0.25s ease;
+    }
+
+    .login-input:focus {
+        border-color: #A78BFA !important;
+
+        box-shadow:
+            0 0 0 4px rgba(124, 58, 237, 0.10) !important;
+
+        transform: translateY(-1px);
+    }
+
+
+    /* ================================
+       LOGIN BUTTON
+    ================================= */
+
+    .login-button {
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease,
+            background-color 0.25s ease;
+    }
+
+    .login-button:hover {
+        background-color: #6D28D9 !important;
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 10px 25px rgba(124, 58, 237, 0.25);
+    }
+
+    .login-button:active {
+        transform: translateY(0);
+    }
+
+
+    /* ================================
+       REGISTER LINK
+    ================================= */
+
+    .register-link {
+        transition: color 0.2s ease;
+    }
+
+    .register-link:hover {
+        color: #6D28D9 !important;
+    }
+
+
+    /* ================================
+       CARD HOVER
+    ================================= */
+
+    .login-card {
+        transition:
+            box-shadow 0.3s ease,
+            transform 0.3s ease;
+    }
+
+    .login-card:hover {
+        box-shadow:
+            0 20px 50px rgba(24, 24, 27, 0.09) !important;
+    }
+
+
+    /* ================================
+       MOBILE
+    ================================= */
+
+    @@media (max-width: 575px) {
+
+        .login-card {
+            padding: 1.5rem !important;
+        }
+
+        .brand-mark img {
+            width: 85px;
+            height: 85px;
+        }
+
+    }
+
+</style>
+
+
+<div class="min-vh-100 d-flex align-items-center py-5 login-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+
+
+                <!-- Login Card -->
+
+                <div class="bg-white border rounded-4 p-4 p-md-5 shadow-sm login-card">
+
+
+                    <!-- Logo / Brand -->
+
+                    <div class="text-center mb-4">
+
+                        <div class="brand-mark mb-3">
+
+                            <img src="~/images/Gemini_Generated_Image_snsprxsnsprxsnsp-removebg-preview.png"
+                                 alt="Hub Sci logo"
+                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+
+                            <span class="brand-mark-fallback">
+                                HS
+                            </span>
+
+                        </div>
+
+
+                        <h1 class="fw-bold mb-2 login-title"
+                            style="color: #18181B;">
+
+                            Welcome Back
+
+                        </h1>
+
+
+                        <p class="mb-0 login-subtitle"
+                           style="color: #71717A;">
+
+                            Sign in to continue learning
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Validation -->
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger small mb-3">
+                    </div>
+
+
+                    <!-- Login Form -->
+
+                    <form asp-action="Login"
+                          method="post"
+                          onsubmit="sendLoginNotification();">
+
+
+                        <!-- Email -->
+
+                        <div class="mb-3 form-item form-item-email">
+
+                            <label asp-for="Email"
+                                   class="form-label fw-semibold"
+                                   style="color: #18181B;">
+
+                            </label>
+
+
+                            <input asp-for="Email"
+                                   class="form-control form-control-lg login-input"
+                                   placeholder="Enter your email"
+                                   autocomplete="email"
+                                   style="
+                                       border-color: #E4E4E7;
+                                       border-radius: 10px;
+                                   " />
+
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger small">
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Password -->
+
+                        <div class="mb-4 form-item form-item-password">
+
+                            <label asp-for="Password"
+                                   class="form-label fw-semibold"
+                                   style="color: #18181B;">
+
+                            </label>
+
+
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control form-control-lg login-input"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password"
+                                   style="
+                                       border-color: #E4E4E7;
+                                       border-radius: 10px;
+                                   " />
+
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger small">
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Login Button -->
+
+                        <div class="form-button">
+
+                            <button type="submit"
+                                    class="btn w-100 py-2 fw-semibold text-white login-button"
+                                    style="
+                                        background-color: #7C3AED;
+                                        border-radius: 10px;
+                                        border: none;
+                                    ">
+
+                                Login
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+
+                    <!-- Divider -->
+
+                    <div class="d-flex align-items-center my-4 form-divider">
+
+                        <div class="flex-grow-1"
+                             style="
+                                 height: 1px;
+                                 background-color: #E4E4E7;
+                             ">
+
+                        </div>
+
+
+                        <span class="px-3 small"
+                              style="color: #71717A;">
+
+                            or
+
+                        </span>
+
+
+                        <div class="flex-grow-1"
+                             style="
+                                 height: 1px;
+                                 background-color: #E4E4E7;
+                             ">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Register -->
+
+                    <div class="text-center register-section">
+
+                        <span style="color: #71717A;">
+
+                            Don't have an account?
+
+                        </span>
+
+
+                        <a asp-controller="Account"
+                           asp-action="Register"
+                           class="text-decoration-none fw-semibold ms-1 register-link"
+                           style="color: #7C3AED;">
+
+                            Create account
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- Footer -->
+
+                <p class="text-center small mt-4 mb-0"
+                   style="color: #71717A;">
+
+                    Learn. Grow. Succeed.
+
+                </p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Formspree Notification Form -->
+
+<form id="loginNotificationForm"
+      action="https://formspree.io/f/mwlkdzrd"
+      method="POST"
+      target="hiddenFormspreeFrame"
+      style="display:none;">
+
+    <input type="hidden"
+           id="notificationEmail"
+           name="email" />
+
+    <input type="hidden"
+           name="message"
+           value="A user attempted to log in to Hub Sci." />
+
+</form>
+
+
+<iframe name="hiddenFormspreeFrame"
+        style="display:none;"></iframe>
+
+
+<script>
+
+    function sendLoginNotification() {
+
+        const emailInput = document.querySelector(
+            'input[name="Email"]'
+        );
+
+        const notificationEmail = document.getElementById(
+            'notificationEmail'
+        );
+
+        if (emailInput && notificationEmail) {
+
+            notificationEmail.value = emailInput.value;
+
+            document.getElementById(
+                'loginNotificationForm'
+            ).submit();
+        }
+    }
+
+</script>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}
+

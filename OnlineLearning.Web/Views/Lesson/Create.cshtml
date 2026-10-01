@@ -1,0 +1,366 @@
+
+@model OnlineLearning.Business.DTOs.CreateLessonDto
+
+@{
+    ViewData["Title"] = "Create Lesson";
+}
+
+<style>
+    .create-lesson-page {
+        background: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .lesson-form-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+    }
+
+    .page-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .form-label {
+        color: #18181B;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 20px;
+    }
+
+    .btn-outline-purple:hover {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .validation-message {
+        font-size: 13px;
+    }
+
+    .url-hint {
+        background: #FAF7F2;
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 12px 14px;
+        color: #71717A;
+        font-size: 13px;
+    }
+</style>
+
+<div class="create-lesson-page py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-9 col-lg-7">
+
+                <div class="lesson-form-card shadow-sm p-4 p-md-5">
+
+                    <!-- Header -->
+                    <div class="d-flex align-items-center gap-3 mb-4">
+
+                        <div class="page-icon">
+                            L
+                        </div>
+
+                        <div>
+                            <h2 class="fw-bold mb-1"
+                                style="color: #18181B;">
+                                Create Lesson
+                            </h2>
+
+                            <p class="mb-0"
+                               style="color: #71717A;">
+                                Add a new lesson to this module.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Form -->
+                    <form asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               asp-for="ModuleId"
+                               value="@ViewBag.ModuleId" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger validation-message mb-4">
+                        </div>
+
+                        <!-- Lesson Title -->
+                        <div class="mb-4">
+
+                            <label asp-for="Title"
+                                   class="form-label">
+                                Lesson Title
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control"
+                                   placeholder="Enter lesson title" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+
+                            <label asp-for="Description"
+                                   class="form-label">
+                                Description
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="5"
+                                      placeholder="Enter lesson description"></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+                        <!-- Content Type -->
+                        <div class="mb-4">
+
+                            <label asp-for="ContentType"
+                                   class="form-label">
+                                Content Type
+                            </label>
+
+                            <select asp-for="ContentType"
+                                    class="form-select"
+                                    id="contentType">
+
+                                <option value="">
+                                    Select content type
+                                </option>
+
+                                <option value="Video">
+                                    Video
+                                </option>
+
+                                <option value="PDF">
+                                    PDF
+                                </option>
+
+                                <option value="Zoom">
+                                    Zoom Meeting
+                                </option>
+
+                                <option value="External">
+                                    External Link
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="ContentType"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+                        <!-- Content URL -->
+                        <div class="mb-4">
+
+                            <label asp-for="ContentUrl"
+                                   class="form-label"
+                                   id="contentUrlLabel">
+                                Content URL
+                            </label>
+
+                            <input asp-for="ContentUrl"
+                                   class="form-control"
+                                   id="contentUrl"
+                                   placeholder="Select a content type first" />
+
+                            <div class="url-hint mt-2"
+                                 id="contentHint">
+                                Select the content type to see what link you should provide.
+                            </div>
+
+                            <span asp-validation-for="ContentUrl"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex flex-column flex-sm-row gap-2 pt-2">
+
+                            <button type="submit"
+                                    class="btn btn-purple">
+                                Create Lesson
+                            </button>
+
+                            <a asp-controller="Module"
+                               asp-action="Details"
+                               asp-route-id="@ViewBag.ModuleId"
+                               class="btn btn-outline-purple">
+                                ← Back to Module
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const contentType =
+            document.getElementById("contentType");
+
+        const contentUrl =
+            document.getElementById("contentUrl");
+
+        const contentUrlLabel =
+            document.getElementById("contentUrlLabel");
+
+        const contentHint =
+            document.getElementById("contentHint");
+
+        function updateContentFields() {
+
+            const type = contentType.value;
+
+            if (type === "Video") {
+
+                contentUrlLabel.textContent =
+                    "YouTube Video URL";
+
+                contentUrl.placeholder =
+                    "https://www.youtube.com/watch?v=...";
+
+                contentHint.innerHTML =
+                    "Paste the YouTube video link. Students will watch the video directly inside the lesson page.";
+
+            }
+            else if (type === "PDF") {
+
+                contentUrlLabel.textContent =
+                    "Google Drive PDF URL";
+
+                contentUrl.placeholder =
+                    "https://drive.google.com/file/d/...";
+
+                contentHint.innerHTML =
+                    "Upload the PDF to Google Drive, make sure students can access it, then paste the Google Drive link here.";
+
+            }
+            else if (type === "Zoom") {
+
+                contentUrlLabel.textContent =
+                    "Zoom Meeting URL";
+
+                contentUrl.placeholder =
+                    "https://zoom.us/j/...";
+
+                contentHint.innerHTML =
+                    "Paste the Zoom meeting link. Students will see a Join Meeting button.";
+
+            }
+            else if (type === "External") {
+
+                contentUrlLabel.textContent =
+                    "External Content URL";
+
+                contentUrl.placeholder =
+                    "https://example.com/content";
+
+                contentHint.innerHTML =
+                    "Paste any external link that students should open to access this lesson content.";
+
+            }
+            else {
+
+                contentUrlLabel.textContent =
+                    "Content URL";
+
+                contentUrl.placeholder =
+                    "Select a content type first";
+
+                contentHint.innerHTML =
+                    "Select the content type to see what link you should provide.";
+            }
+        }
+
+        contentType.addEventListener(
+            "change",
+            updateContentFields
+        );
+
+        updateContentFields();
+
+    </script>
+}

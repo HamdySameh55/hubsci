@@ -1,0 +1,191 @@
+@model OnlineLearning.Business.DTOs.CreateQuestionDto
+
+@{
+ViewData["Title"] = "Create Question";
+}
+
+<style>
+    .question-create-page {
+        background-color: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .question-create-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .question-create-header {
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .question-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background-color: #FFFFFF;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .question-title {
+        color: #18181B;
+    }
+
+    .question-description {
+        color: #52525B;
+        line-height: 1.7;
+    }
+
+    .form-label {
+        color: #27272A;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+        color: #18181B;
+    }
+
+    .form-control:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .validation-message {
+        font-size: 13px;
+    }
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background-color: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-outline-purple:hover {
+        background-color: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+</style>
+
+<div class="question-create-page py-5">
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-7">
+
+            <div class="question-create-card shadow-sm">
+
+                <!-- Header -->
+                <div class="question-create-header p-4 p-md-5">
+
+                    <div class="question-icon mb-4">
+                        ?
+                    </div>
+
+                    <h1 class="question-title fw-bold mb-2">
+                        Create Question
+                    </h1>
+
+                    <p class="question-description mb-0">
+                        Add a question to this quiz.
+                    </p>
+
+                </div>
+
+                <!-- Form -->
+                <div class="p-4 p-md-5">
+
+                    <form asp-controller="Question"
+                          asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="quizId"
+                               value="@ViewBag.QuizId" />
+
+                        <div class="mb-4">
+
+                            <label asp-for="QuestionText"
+                                   class="form-label">
+                                Question
+                            </label>
+
+                            <textarea asp-for="QuestionText"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Enter your question"></textarea>
+
+                            <span asp-validation-for="QuestionText"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+
+                            <a asp-controller="Quiz"
+                               asp-action="Edit"
+                               asp-route-id="@ViewBag.QuizId"
+                               class="btn btn-outline-purple">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-purple">
+                                Create Question
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" />
+}

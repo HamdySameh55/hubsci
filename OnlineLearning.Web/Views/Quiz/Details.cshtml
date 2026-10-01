@@ -1,0 +1,258 @@
+@model OnlineLearning.Business.DTOs.QuizDto
+
+@{
+ViewData["Title"] = Model.Title;
+}
+
+<style>
+    .quiz-page {
+        background-color: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .quiz-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .quiz-header {
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .quiz-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background-color: #FFFFFF;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .quiz-title {
+        color: #18181B;
+    }
+
+    .quiz-description {
+        color: #52525B;
+        line-height: 1.8;
+    }
+
+    .question-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 16px;
+    }
+
+    .question-number {
+        color: #7C3AED;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .question-text {
+        color: #18181B;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.6;
+    }
+
+    .answer-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 12px;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .answer-option:last-child {
+        margin-bottom: 0;
+    }
+
+    .answer-option:hover {
+        background-color: #F5F3FF;
+        border-color: #C4B5FD;
+        transform: translateX(2px);
+    }
+
+    .answer-option input {
+        margin: 0;
+        width: 17px;
+        height: 17px;
+        accent-color: #7C3AED;
+        flex-shrink: 0;
+    }
+
+    .answer-text {
+        color: #3F3F46;
+        line-height: 1.5;
+    }
+
+    .empty-quiz {
+        background-color: #FFFBEB;
+        border: 1px solid #FDE68A;
+        border-radius: 14px;
+        color: #92400E;
+    }
+
+    .btn-submit {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 11px 24px;
+    }
+
+    .btn-submit:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+</style>
+
+<div class="quiz-page py-5">
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-9">
+
+            <div class="quiz-card shadow-sm">
+
+                <!-- Quiz Header -->
+                <div class="quiz-header p-4 p-md-5">
+
+                    <div class="quiz-icon mb-4">
+                        Q
+                    </div>
+
+                    <h1 class="quiz-title fw-bold mb-3">
+                        @Model.Title
+                    </h1>
+
+                    <p class="quiz-description mb-0">
+                        @Model.Description
+                    </p>
+
+                </div>
+
+
+                <!-- Quiz Questions -->
+                <div class="p-4 p-md-5">
+
+                    @if (!Model.Questions.Any())
+                    {
+                        <div class="empty-quiz p-4 text-center">
+
+                            <div class="fw-semibold mb-1">
+                                No questions available
+                            </div>
+
+                            <div class="small">
+                                This quiz does not contain any questions yet.
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-controller="QuizAttempt"
+                              asp-action="Create"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="EnrollmentId"
+                                   value="@ViewBag.EnrollmentId" />
+
+                            <input type="hidden"
+                                   name="QuizId"
+                                   value="@Model.QuizId" />
+
+
+                            @for (int i = 0; i < Model.Questions.Count; i++)
+                            {
+                                var question = Model.Questions[i];
+
+                                <div class="question-card p-4 mb-4">
+
+                                    <div class="question-number mb-2">
+                                        Question @(i + 1)
+                                    </div>
+
+                                    <div class="question-text mb-4">
+                                        @question.QuestionText
+                                    </div>
+
+
+                                    <!-- Question Id -->
+                                    <input type="hidden"
+                                           name="Answers[@i].QuestionId"
+                                           value="@question.QuestionId" />
+
+
+                                    <!-- Answers -->
+                                    @foreach (var answer in question.Answers)
+                                    {
+                                        <label class="answer-option">
+
+                                            <input type="radio"
+                                                   name="Answers[@i].SelectedAnswerId"
+                                                   value="@answer.AnswerId"
+                                                   required />
+
+                                            <span class="answer-text">
+                                                @answer.AnswerText
+                                            </span>
+
+                                        </label>
+                                    }
+
+                                </div>
+                            }
+
+
+                            <!-- Submit -->
+                            <div class="d-flex justify-content-end mt-4">
+
+                                <button type="submit"
+                                        class="btn btn-submit">
+                                    Submit Quiz
+                                </button>
+
+                            </div>
+
+                        </form>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>

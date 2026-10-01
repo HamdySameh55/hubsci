@@ -1,0 +1,204 @@
+
+@model OnlineLearning.Business.DTOs.CreateUserDto
+
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<div class="min-vh-100 d-flex align-items-center py-5"
+     style="background-color: #FAF7F2;">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+
+                <!-- Create User Card -->
+                <div class="bg-white border rounded-4 p-4 p-md-5 shadow-sm">
+
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+
+                        <div class="brand-mark mb-3">
+                            <img src="~/images/Gemini_Generated_Image_snsprxsnsprxsnsp-removebg-preview.png"
+                                 alt="Hub Sci logo"
+                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                            <span class="brand-mark-fallback">HS</span>
+                        </div>
+
+                        <h1 class="fw-bold mb-2"
+                            style="color: #18181B;">
+                            Create User
+                        </h1>
+
+                        <p class="mb-0"
+                           style="color: #71717A;">
+                            Add a new member to your learning platform
+                        </p>
+
+                    </div>
+
+
+                    <!-- Validation -->
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger small mb-3">
+                    </div>
+
+
+                    <!-- Form -->
+                    <form asp-action="Create" method="post">
+
+                        <!-- Name -->
+                        <div class="mb-3">
+
+                            <label asp-for="Name"
+                                   class="form-label fw-semibold"
+                                   style="color: #18181B;">
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control form-control-lg"
+                                   placeholder="Enter full name"
+                                   autocomplete="name"
+                                   style="
+                                      border-color: #E4E4E7;
+                                      border-radius: 10px;
+                                   " />
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="mb-3">
+
+                            <label asp-for="Email"
+                                   class="form-label fw-semibold"
+                                   style="color: #18181B;">
+                            </label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control form-control-lg"
+                                   placeholder="Enter email address"
+                                   autocomplete="email"
+                                   style="
+                                      border-color: #E4E4E7;
+                                      border-radius: 10px;
+                                   " />
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="mb-3">
+
+                            <label asp-for="Password"
+                                   class="form-label fw-semibold"
+                                   style="color: #18181B;">
+                            </label>
+
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control form-control-lg"
+                                   placeholder="Create a password"
+                                   autocomplete="new-password"
+                                   style="
+                                      border-color: #E4E4E7;
+                                      border-radius: 10px;
+                                   " />
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Role -->
+                        <div class="mb-4">
+
+                            <label asp-for="Role"
+                                   class="form-label fw-semibold"
+                                   style="color: #18181B;">
+                            </label>
+
+                            <select asp-for="Role"
+                                    class="form-select form-select-lg"
+                                    style="
+                                        border-color: #E4E4E7;
+                                        border-radius: 10px;
+                                    ">
+
+                                <option value="">Select user role</option>
+                                <option value="Student">Student</option>
+                                <option value="Instructor">Instructor</option>
+                                <option value="Admin">Admin</option>
+
+                            </select>
+
+                            <span asp-validation-for="Role"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Actions -->
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+
+                            <button type="submit"
+                                    class="btn flex-grow-1 py-2 fw-semibold text-white"
+                                    style="
+                                        background-color: #7C3AED;
+                                        border-radius: 10px;
+                                        border: none;
+                                    ">
+                                Create User
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn py-2 px-4 fw-semibold"
+                               style="
+                                    color: #7C3AED;
+                                    border: 1px solid #7C3AED;
+                                    border-radius: 10px;
+                                    background-color: #FFFFFF;
+                               ">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- Footer -->
+                <p class="text-center small mt-4 mb-0"
+                   style="color: #71717A;">
+                    Manage your learning community
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

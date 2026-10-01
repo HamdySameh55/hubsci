@@ -1,0 +1,223 @@
+
+@model OnlineLearning.Business.DTOs.CreateModuleDto
+
+@{
+    ViewData["Title"] = "Edit Module";
+}
+
+<style>
+    .edit-module-page {
+        background: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .module-form-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+    }
+
+    .page-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .form-label {
+        color: #18181B;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+    }
+
+    .form-control:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 20px;
+    }
+
+    .btn-outline-purple:hover {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .validation-message {
+        font-size: 13px;
+    }
+</style>
+
+<div class="edit-module-page py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-9 col-lg-7">
+
+                <div class="module-form-card shadow-sm p-4 p-md-5">
+
+                    <!-- Header -->
+                    <div class="d-flex align-items-center gap-3 mb-4">
+
+                        <div class="page-icon">
+                            ✎
+                        </div>
+
+                        <div>
+                            <h2 class="fw-bold mb-1"
+                                style="color: #18181B;">
+                                Edit Module
+                            </h2>
+
+                            <p class="mb-0"
+                               style="color: #71717A;">
+                                Update your module information.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Form -->
+                    <form asp-action="Edit"
+                          method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger validation-message mb-4">
+                        </div>
+
+
+                        <!-- Title -->
+                        <div class="mb-4">
+
+                            <label asp-for="Title"
+                                   class="form-label">
+                                Module Title
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control"
+                                   placeholder="Enter module title" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="mb-4">
+
+                            <label asp-for="Description"
+                                   class="form-label">
+                                Description
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="5"
+                                      placeholder="Enter module description"></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Order Number -->
+                        <div class="mb-4">
+
+                            <label asp-for="OrderNumber"
+                                   class="form-label">
+                                Module Order
+                            </label>
+
+                            <input asp-for="OrderNumber"
+                                   type="number"
+                                   min="1"
+                                   class="form-control"
+                                   placeholder="Enter module order" />
+
+                            <small class="d-block mt-2"
+                                   style="color: #71717A;">
+                                Example: 1 for the first module, 2 for the second.
+                            </small>
+
+                            <span asp-validation-for="OrderNumber"
+                                  class="text-danger validation-message">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+                        <div class="d-flex flex-column flex-sm-row gap-2 pt-2">
+
+                            <button type="submit"
+                                    class="btn btn-purple">
+                                Save Changes
+                            </button>
+
+                            <a asp-action="Index"
+                               asp-route-courseId="@ViewBag.CourseId"
+                               class="btn btn-outline-purple">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

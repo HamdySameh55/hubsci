@@ -1,0 +1,650 @@
+
+@model OnlineLearning.Business.DTOs.ModuleDto
+
+@{
+    ViewData["Title"] = "Module Details";
+
+    var lessons =
+        ViewBag.Lessons as IEnumerable<OnlineLearning.Business.DTOs.LessonDto>
+        ?? Enumerable.Empty<OnlineLearning.Business.DTOs.LessonDto>();
+
+    var quiz =
+        ViewBag.Quiz as OnlineLearning.Business.DTOs.QuizDto;
+
+    bool isOwner =
+        ViewBag.IsOwner != null &&
+        (bool)ViewBag.IsOwner;
+}
+
+<style>
+
+    .module-page {
+        background: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .module-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 22px;
+        overflow: hidden;
+    }
+
+    .module-header {
+        background: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+        padding: 40px;
+    }
+
+    .module-number {
+        width: 68px;
+        height: 68px;
+        border-radius: 18px;
+        background: #FFFFFF;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 800;
+        flex-shrink: 0;
+        border: 1px solid #DDD6FE;
+    }
+
+    .module-badge {
+        display: inline-block;
+        background: #FFFFFF;
+        color: #5B21B6;
+        border: 1px solid #DDD6FE;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .module-title {
+        color: #18181B;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .module-description {
+        color: #52525B;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+
+    .module-body {
+        padding: 32px 40px;
+    }
+
+    .section-title {
+        color: #18181B;
+        font-weight: 800;
+    }
+
+    .section-subtitle {
+        color: #71717A;
+        font-size: 14px;
+    }
+
+    .lesson-card,
+    .quiz-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 16px;
+        padding: 18px;
+        transition: .2s ease;
+    }
+
+    .lesson-card:hover,
+    .quiz-card:hover {
+        border-color: #C4B5FD;
+        transform: translateY(-2px);
+    }
+
+    .lesson-icon,
+    .quiz-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 19px;
+        flex-shrink: 0;
+    }
+
+    .lesson-title,
+    .quiz-title {
+        color: #18181B;
+        font-weight: 700;
+    }
+
+    .lesson-description,
+    .quiz-description {
+        color: #71717A;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .content-type {
+        display: inline-flex;
+        align-items: center;
+        background: #F4F4F5;
+        color: #52525B;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .empty-box {
+        background: #FAFAFA;
+        border: 1px dashed #D4D4D8;
+        border-radius: 16px;
+        padding: 28px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-weight: 800;
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 18px;
+        text-decoration: none;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 18px;
+        text-decoration: none;
+    }
+
+    .btn-outline-purple:hover {
+        background: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .btn-edit {
+        background: #FFF7ED;
+        border: 1px solid #FED7AA;
+        color: #EA580C;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 18px;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover {
+        background: #FFEDD5;
+        border-color: #FDBA74;
+        color: #C2410C;
+    }
+
+    .admin-badge {
+        background: #F4F4F5;
+        color: #52525B;
+        border: 1px solid #E4E4E7;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    @@media (max-width: 768px) {
+
+        .module-header {
+            padding: 28px 22px;
+        }
+
+        .module-body {
+            padding: 24px 20px;
+        }
+
+        .module-title {
+            font-size: 28px;
+        }
+
+    }
+
+</style>
+
+
+<div class="module-page py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-lg-9">
+
+                <div class="module-card shadow-sm">
+
+                    <!-- Module Header -->
+
+                    <div class="module-header">
+
+                        <div class="d-flex flex-column flex-sm-row gap-4 align-items-sm-center">
+
+                            <div class="module-number">
+                                @Model.OrderNumber
+                            </div>
+
+                            <div class="flex-grow-1">
+
+                                <span class="module-badge mb-2">
+                                    Module @Model.OrderNumber
+                                </span>
+
+                                <h1 class="module-title mb-0">
+                                    @Model.Title
+                                </h1>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Module Body -->
+
+                    <div class="module-body">
+
+                        <!-- Description -->
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Description))
+                        {
+                            <div class="mb-5">
+
+                                <h5 class="section-title mb-2">
+                                    About This Module
+                                </h5>
+
+                                <p class="module-description mb-0">
+                                    @Model.Description
+                                </p>
+
+                            </div>
+                        }
+
+
+                        <!-- Lessons -->
+
+                        <div class="mb-5">
+
+                            <div class="d-flex flex-column flex-sm-row
+                                        justify-content-between
+                                        align-items-sm-center
+                                        gap-3 mb-3">
+
+                                <div>
+
+                                    <h5 class="section-title mb-1">
+                                        Lessons
+                                    </h5>
+
+                                    <p class="section-subtitle mb-0">
+                                        Learn the content of this module.
+                                    </p>
+
+                                </div>
+
+                                @if (User.IsInRole("Instructor") && isOwner)
+                                {
+                                    <a asp-controller="Lesson"
+                                       asp-action="Create"
+                                       asp-route-moduleId="@Model.ModuleId"
+                                       class="btn btn-purple">
+                                        + Add Lesson
+                                    </a>
+                                }
+
+                            </div>
+
+
+                            @if (!lessons.Any())
+                            {
+                                <div class="empty-box">
+
+                                    <div class="empty-icon">
+                                        L
+                                    </div>
+
+                                    <div class="fw-semibold mb-1"
+                                         style="color:#18181B;">
+                                        No lessons yet
+                                    </div>
+
+                                    <div class="small"
+                                         style="color:#71717A;">
+                                        This module does not have any lessons yet.
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex flex-column gap-3">
+
+                                    @foreach (var lesson in lessons)
+                                    {
+                                        var lessonType =
+                                            lesson.ContentType?.Trim().ToLowerInvariant() ?? "";
+
+                                        var lessonIcon = "L";
+
+                                        if (lessonType == "video")
+                                        {
+                                            lessonIcon = "▶";
+                                        }
+                                        else if (lessonType == "pdf")
+                                        {
+                                            lessonIcon = "▣";
+                                        }
+                                        else if (lessonType.Contains("zoom"))
+                                        {
+                                            lessonIcon = "●";
+                                        }
+                                        else if (lessonType.Contains("external"))
+                                        {
+                                            lessonIcon = "↗";
+                                        }
+
+                                        <div class="lesson-card">
+
+                                            <div class="d-flex flex-column flex-sm-row
+                                                        align-items-sm-center
+                                                        gap-3">
+
+                                                <div class="lesson-icon">
+                                                    @lessonIcon
+                                                </div>
+
+                                                <div class="flex-grow-1">
+
+                                                    <div class="d-flex flex-wrap
+                                                                align-items-center
+                                                                gap-2 mb-1">
+
+                                                        <span class="lesson-title">
+                                                            @lesson.Title
+                                                        </span>
+
+                                                        <span class="content-type">
+                                                            @lesson.ContentType
+                                                        </span>
+
+                                                    </div>
+
+                                                    @if (!string.IsNullOrWhiteSpace(lesson.Description))
+                                                    {
+                                                        <p class="lesson-description mb-0">
+                                                            @lesson.Description
+                                                        </p>
+                                                    }
+
+                                                </div>
+
+                                                <div>
+
+                                                    <a asp-controller="Lesson"
+                                                       asp-action="Details"
+                                                       asp-route-id="@lesson.LessonId"
+                                                       class="btn btn-outline-purple">
+                                                        View Lesson
+                                                    </a>
+
+                                                    @if (User.IsInRole("Admin"))
+                                                    {
+                                                        <form asp-controller="Admin"
+                                                              asp-action="DeleteLesson"
+                                                              asp-route-id="@lesson.LessonId"
+                                                              method="post"
+                                                              class="d-inline"
+                                                              onsubmit="return confirm('Are you sure you want to delete this lesson? Student progress on it will also be deleted.');">
+
+                                                            @Html.AntiForgeryToken()
+
+                                                            <button type="submit"
+                                                                    class="btn btn-outline-purple"
+                                                                    style="
+                                                                        background-color: #FEE2E2;
+                                                                        border: 1px solid #FECACA;
+                                                                        color: #B91C1C;
+                                                                    ">
+                                                                Delete
+                                                            </button>
+
+                                                        </form>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+
+                        </div>
+
+
+                        <hr style="border-color:#E4E4E7;"
+                            class="mb-5" />
+
+
+                        <!-- Quiz -->
+
+                        <div class="mb-5">
+
+                            <div class="d-flex flex-column flex-sm-row
+                                        justify-content-between
+                                        align-items-sm-center
+                                        gap-3 mb-3">
+
+                                <div>
+
+                                    <h5 class="section-title mb-1">
+                                        Quiz
+                                    </h5>
+
+                                    <p class="section-subtitle mb-0">
+                                        Test your knowledge after completing this module.
+                                    </p>
+
+                                </div>
+
+                                @if (User.IsInRole("Instructor")
+                                     && isOwner
+                                     && quiz == null)
+                                {
+                                    <a asp-controller="Quiz"
+                                       asp-action="Create"
+                                       asp-route-moduleId="@Model.ModuleId"
+                                       class="btn btn-purple">
+                                        + Create Quiz
+                                    </a>
+                                }
+
+                            </div>
+
+
+                            @if (quiz == null)
+                            {
+                                <div class="empty-box">
+
+                                    <div class="empty-icon">
+                                        Q
+                                    </div>
+
+                                    <div class="fw-semibold mb-1"
+                                         style="color:#18181B;">
+                                        No quiz available
+                                    </div>
+
+                                    <div class="small"
+                                         style="color:#71717A;">
+
+                                        @if (User.IsInRole("Instructor") && isOwner)
+                                        {
+                                            <span>
+                                                Create a quiz for this module.
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                This module does not have a quiz yet.
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="quiz-card">
+
+                                    <div class="d-flex flex-column flex-md-row
+                                                align-items-md-center
+                                                gap-3">
+
+                                        <div class="quiz-icon">
+                                            Q
+                                        </div>
+
+                                        <div class="flex-grow-1">
+
+                                            <div class="d-flex flex-wrap
+                                                        align-items-center
+                                                        gap-2 mb-1">
+
+                                                <span class="quiz-title">
+                                                    @quiz.Title
+                                                </span>
+
+                                                <span class="content-type">
+                                                    Quiz
+                                                </span>
+
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <span class="admin-badge">
+                                                        Admin View
+                                                    </span>
+                                                }
+
+                                            </div>
+
+                                            @if (!string.IsNullOrWhiteSpace(quiz.Description))
+                                            {
+                                                <p class="quiz-description mb-0">
+                                                    @quiz.Description
+                                                </p>
+                                            }
+
+                                        </div>
+
+
+                                        <div class="d-flex flex-wrap gap-2">
+
+                                            @if (User.IsInRole("Instructor") && isOwner)
+                                            {
+                                                <a asp-controller="Quiz"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@quiz.QuizId"
+                                                   class="btn btn-outline-purple">
+                                                    Edit Quiz
+                                                </a>
+                                            }
+                                            else if (User.IsInRole("Student"))
+                                            {
+                                                <a asp-controller="Quiz"
+                                                   asp-action="Details"
+                                                   asp-route-id="@quiz.QuizId"
+                                                   class="btn btn-purple">
+                                                    Take Quiz
+                                                </a>
+                                            }
+                                            else if (User.IsInRole("Admin"))
+                                            {
+                                                <a asp-controller="Quiz"
+                                                   asp-action="Details"
+                                                   asp-route-id="@quiz.QuizId"
+                                                   class="btn btn-outline-purple">
+                                                    View Quiz
+                                                </a>
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+
+
+                        <hr style="border-color:#E4E4E7;"
+                            class="mb-4" />
+
+
+                        <!-- Bottom Actions -->
+
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+
+                            <a asp-controller="Module"
+                               asp-action="Index"
+                               asp-route-courseId="@Model.CourseId"
+                               class="btn btn-outline-purple">
+                                ← Back to Modules
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

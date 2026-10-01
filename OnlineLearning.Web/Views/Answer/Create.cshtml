@@ -1,0 +1,292 @@
+@model OnlineLearning.Business.DTOs.CreateAnswerDto
+
+@{
+ViewData["Title"] = "Create Answer";
+}
+
+<div class="container py-5">
+
+<!-- Header -->
+<div class="d-flex flex-column flex-md-row
+            justify-content-between
+            align-items-md-center
+            gap-3 mb-5">
+
+    <div>
+        <div class="small fw-semibold mb-2"
+             style="color: #7C3AED;">
+            ANSWER MANAGEMENT
+        </div>
+
+        <h1 class="fw-bold mb-2"
+            style="color: #18181B;">
+            Add Answer
+        </h1>
+
+        <p class="mb-0"
+           style="color: #71717A;">
+            Add an answer option to this question.
+        </p>
+    </div>
+
+    <a asp-controller="Question"
+       asp-action="Edit"
+       asp-route-id="@ViewBag.QuestionId"
+       class="btn btn-outline-purple">
+        ← Back to Question
+    </a>
+
+</div>
+
+
+<!-- Answer Form -->
+<div class="answer-card">
+
+    <div class="answer-card-header">
+
+        <div class="answer-icon">
+            ✓
+        </div>
+
+        <div>
+            <h4 class="fw-bold mb-1"
+                style="color: #18181B;">
+                Answer Information
+            </h4>
+
+            <p class="small mb-0"
+               style="color: #71717A;">
+                Enter the answer and specify whether it is correct.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="answer-card-body">
+
+        <form asp-action="Create"
+              asp-route-questionId="@ViewBag.QuestionId"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4">
+            </div>
+
+
+            <!-- Question ID -->
+
+            <input type="hidden"
+                   asp-for="QuestionId"
+                   value="@ViewBag.QuestionId" />
+
+
+            <!-- Answer Text -->
+
+            <div class="mb-4">
+
+                <label asp-for="AnswerText"
+                       class="form-label fw-semibold"
+                       style="color: #27272A;">
+                    Answer
+                </label>
+
+                <input asp-for="AnswerText"
+                       class="form-control custom-input"
+                       placeholder="Enter answer text..."
+                       required />
+
+                <span asp-validation-for="AnswerText"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <!-- Correct Answer -->
+
+            <div class="correct-answer-box mb-4">
+
+                <div class="form-check">
+
+                    <input asp-for="IsCorrect"
+                           class="form-check-input correct-checkbox" />
+
+                    <label asp-for="IsCorrect"
+                           class="form-check-label fw-semibold"
+                           style="color: #27272A;">
+                        This is the correct answer
+                    </label>
+
+                </div>
+
+                <div class="small mt-2"
+                     style="color: #71717A;">
+                    Mark this option if it is the correct answer for the question.
+                </div>
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="d-flex flex-column flex-sm-row
+                        justify-content-end
+                        gap-3">
+
+                <a asp-controller="Question"
+                   asp-action="Edit"
+                   asp-route-id="@ViewBag.QuestionId"
+                   class="btn btn-light-custom">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn btn-purple">
+                    Add Answer
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</div>
+
+<style>
+
+    body {
+        background-color: #FAF7F2;
+    }
+
+    .answer-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .answer-card-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 24px 28px;
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .answer-card-body {
+        padding: 28px;
+    }
+
+    .answer-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 14px;
+        background-color: #7C3AED;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .custom-input {
+        width: 100%;
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+        background-color: #FFFFFF;
+        color: #18181B;
+    }
+
+    .custom-input:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+        outline: none;
+    }
+
+    .correct-answer-box {
+        padding: 16px 18px;
+        background-color: #FAF7F2;
+        border: 1px solid #E4E4E7;
+        border-radius: 12px;
+    }
+
+    .correct-checkbox {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        border-color: #A1A1AA;
+        cursor: pointer;
+    }
+
+    .correct-checkbox:checked {
+        background-color: #7C3AED;
+        border-color: #7C3AED;
+    }
+
+    .correct-checkbox:focus {
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background-color: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        padding: 9px 20px;
+        font-weight: 600;
+    }
+
+    .btn-outline-purple:hover {
+        background-color: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .btn-light-custom {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        color: #27272A;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-light-custom:hover {
+        background-color: #F4F4F5;
+        border-color: #D4D4D8;
+        color: #18181B;
+    }
+
+</style>
+
+@section Scripts {
+@{
+await Html.RenderPartialAsync(
+"_ValidationScriptsPartial");
+}
+}

@@ -1,0 +1,163 @@
+@model IEnumerable<OnlineLearning.Business.DTOs.PaymentDto>
+
+@{
+    ViewData["Title"] = "Pending Payments";
+}
+
+<div class="container py-5">
+
+    <div class="mb-5">
+        <h1 class="fw-bold" style="color: #2D1B36;">
+            Pending Payments
+        </h1>
+
+        <p class="text-muted mb-0">
+            Review payment proofs submitted by students and approve or
+            reject them. Approval activates the student's enrollment.
+        </p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+
+            <div class="mb-3" style="font-size: 3rem;">
+                ✓
+            </div>
+
+            <h3 class="fw-bold" style="color: #2D1B36;">
+                No pending payments
+            </h3>
+
+            <p class="text-muted mb-0">
+                All submitted payments have been reviewed.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var payment in Model)
+            {
+                <div class="col-12 col-lg-6">
+
+                    <div class="card h-100 border-0 shadow-sm"
+                         style="border-radius: 16px; overflow: hidden;">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+
+                                <div>
+                                    <div class="fw-bold fs-5"
+                                         style="color: #2D1B36;">
+                                        @payment.CourseTitle
+                                    </div>
+
+                                    <div class="text-muted small">
+                                        Course #@payment.CourseId
+                                    </div>
+                                </div>
+
+                                <span class="badge rounded-pill px-3 py-2"
+                                      style="background: #FEF3C7; color: #92400E;">
+                                    @payment.Amount.ToString("N2") EGP
+                                </span>
+
+                            </div>
+
+                            <hr />
+
+                            <div class="row g-3 small">
+
+                                <div class="col-6">
+                                    <div class="text-muted mb-1">Student</div>
+                                    <div class="fw-semibold">@payment.StudentName</div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="text-muted mb-1">Submitted On</div>
+                                    <div class="fw-semibold">
+                                        @payment.PaymentDate.ToLocalTime().ToString("dd MMM yyyy, HH:mm")
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="text-muted mb-1">Method</div>
+                                    <div class="fw-semibold">@payment.PaymentMethod</div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="text-muted mb-1">Transaction Ref</div>
+                                    <div class="fw-semibold">
+                                        @payment.TransactionReference
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(payment.ProofFilePath))
+                            {
+                                <div class="mt-3">
+                                    <div class="text-muted small mb-1">
+                                        Payment Screenshot
+                                    </div>
+                                    <a href="@payment.ProofFilePath"
+                                       target="_blank"
+                                       rel="noopener">
+                                        <img src="@payment.ProofFilePath"
+                                             alt="Payment proof"
+                                             class="img-fluid rounded-3 border"
+                                             style="max-height: 220px; width: 100%;
+                                                    object-fit: cover;" />
+                                    </a>
+                                </div>
+                            }
+
+                            <div class="d-flex gap-2 mt-4">
+
+                                <form asp-controller="Payment"
+                                      asp-action="Approve"
+                                      asp-route-id="@payment.PaymentId"
+                                      method="post"
+                                      class="flex-fill">
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn w-100 text-white fw-semibold"
+                                            style="background: #16A34A; border-radius: 10px;">
+                                        Approve
+                                    </button>
+                                </form>
+
+                                <form asp-controller="Payment"
+                                      asp-action="Reject"
+                                      asp-route-id="@payment.PaymentId"
+                                      method="post"
+                                      class="flex-fill">
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn w-100 fw-semibold"
+                                            style="background: white; color: #DC2626;
+                                                   border: 1px solid #DC2626;
+                                                   border-radius: 10px;">
+                                        Reject
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

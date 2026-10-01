@@ -1,0 +1,124 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(124, 58, 237, 0.35);
+}
+
+.hub-sci-logo-nav {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-mark {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background-color: #EDE9FE;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+.brand-mark .brand-mark-fallback {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #7C3AED;
+}
+
+.navbar-nav .nav-link {
+  transition: color 0.15s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #7C3AED;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+/* =========================
+   Hub Sci Logo
+   ========================= */
+
+.hub-sci-logo-nav {
+    width: 49px;
+    height: 49px;
+    object-fit: contain;
+    display: block;
+
+    /* تكبير اللوجو */
+    transform: scale(2.2);
+    transform-origin: center;
+
+    /* تقريب اللوجو من كلمة Hub Sci */
+    margin-right: -12px;
+}
+
+.hub-sci-logo-footer {
+   width: 49px;
+    height: 49px;
+    object-fit: contain;
+    display: block;
+
+    /* تكبير اللوجو */
+    transform: scale(2.2);
+    transform-origin: center;
+
+    /* تقريب اللوجو من كلمة Hub Sci */
+    margin-right: -12px;
+}
+
+/* =========================
+   Hero 3D Rotation
+   ========================= */
+
+.hub-sci-hero-img {
+    width: 100%;
+    min-height: 390px;
+    object-fit: contain;
+    padding: 2rem;
+    transform-style: preserve-3d;
+    animation: hub-sci-rotate3d 8s linear infinite;
+}
+
+@keyframes hub-sci-rotate3d {
+    0%   { transform: perspective(1200px) rotateY(0deg); }
+    100% { transform: perspective(1200px) rotateY(360deg); }
+}

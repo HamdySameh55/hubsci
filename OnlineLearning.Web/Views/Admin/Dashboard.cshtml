@@ -1,0 +1,416 @@
+@model OnlineLearning.Business.DTOs.AdminDashboardDto
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="admin-page">
+
+    <div class="container py-5">
+
+        <!-- Header -->
+        <div class="mb-5">
+            <span class="dashboard-label">
+                ADMIN PANEL
+            </span>
+
+            <h1 class="dashboard-title">
+                Dashboard
+            </h1>
+
+            <p class="dashboard-subtitle">
+                Overview of your Online Learning platform.
+            </p>
+        </div>
+
+
+        <!-- Statistics -->
+        <div class="row g-4">
+
+            <!-- Total Users -->
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div class="stat-label">
+                        Total Users
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.TotalUsers
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Students -->
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🎓
+                    </div>
+
+                    <div class="stat-label">
+                        Students
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.TotalStudents
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Instructors -->
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👨‍🏫
+                    </div>
+
+                    <div class="stat-label">
+                        Instructors
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.TotalInstructors
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Courses -->
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📚
+                    </div>
+
+                    <div class="stat-label">
+                        Total Courses
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.TotalCourses
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Published Courses -->
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                    <div class="stat-label">
+                        Published Courses
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.PublishedCourses
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Enrollments -->
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        📝
+                    </div>
+
+                    <div class="stat-label">
+                        Enrollments
+                    </div>
+
+                    <div class="stat-value">
+                        @Model.TotalEnrollments
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Revenue -->
+            <div class="col-md-6 col-xl-6">
+                <div class="stat-card revenue-card">
+
+                    <div>
+                        <div class="stat-label">
+                            Total Revenue
+                        </div>
+
+                        <div class="stat-value">
+                            @Model.TotalRevenue.ToString("N2")
+                            <span class="currency">
+                                EGP
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="revenue-icon">
+                        $
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+        <div class="mt-5">
+
+            <div class="section-title">
+                Quick Actions
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <a asp-controller="User"
+                       asp-action="Index"
+                       class="action-card">
+
+                        <span class="action-icon">
+                            👥
+                        </span>
+
+                        <div>
+                            <strong>
+                                Manage Users
+                            </strong>
+
+                            <small>
+                                View and manage platform users
+                            </small>
+                        </div>
+
+                    </a>
+                </div>
+
+
+                <div class="col-md-4">
+                    <a asp-controller="Admin"
+                       asp-action="Courses"
+                       class="action-card">
+
+                        <span class="action-icon">
+                            📚
+                        </span>
+
+                        <div>
+                            <strong>
+                                Manage Courses
+                            </strong>
+
+                            <small>
+                                View and delete platform courses
+                            </small>
+                        </div>
+
+                    </a>
+                </div>
+
+
+                <div class="col-md-4">
+                    <a asp-controller="Admin"
+                       asp-action="Feedback"
+                       class="action-card">
+
+                        <span class="action-icon">
+                            💬
+                        </span>
+
+                        <div>
+                            <strong>
+                                View Feedback
+                            </strong>
+
+                            <small>
+                                Review student feedback
+                            </small>
+                        </div>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    body {
+        background-color: #FAF7F2;
+    }
+
+    .admin-page {
+        min-height: 100vh;
+        background-color: #FAF7F2;
+    }
+
+    .dashboard-label {
+        color: #7C3AED;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 3px;
+    }
+
+    .dashboard-title {
+        margin-top: 8px;
+        margin-bottom: 8px;
+        color: #18181B;
+        font-size: 42px;
+        font-weight: 800;
+    }
+
+    .dashboard-subtitle {
+        color: #71717A;
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+
+    .stat-card {
+        height: 100%;
+        padding: 25px;
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 18px;
+        box-shadow:
+            0 8px 25px rgba(24, 24, 27, 0.05);
+        transition: 0.2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        border-color: #DDD6FE;
+        box-shadow:
+            0 12px 30px rgba(124, 58, 237, 0.10);
+    }
+
+    .stat-icon {
+        width: 46px;
+        height: 46px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #EDE9FE;
+        border-radius: 12px;
+        font-size: 21px;
+    }
+
+    .stat-label {
+        color: #71717A;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .stat-value {
+        color: #18181B;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .currency {
+        color: #7C3AED;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .revenue-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .revenue-icon {
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #7C3AED;
+        color: #FFFFFF;
+        border-radius: 50%;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .section-title {
+        color: #18181B;
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 18px;
+    }
+
+    .action-card {
+        min-height: 90px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: #18181B;
+        text-decoration: none;
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 16px;
+        transition: 0.2s ease;
+    }
+
+    .action-card:hover {
+        color: #5B21B6;
+        border-color: #DDD6FE;
+        transform: translateY(-2px);
+        box-shadow:
+            0 10px 25px rgba(124, 58, 237, 0.08);
+    }
+
+    .action-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #EDE9FE;
+        border-radius: 11px;
+        font-size: 19px;
+    }
+
+    .action-card strong {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .action-card small {
+        display: block;
+        color: #71717A;
+        font-size: 12px;
+    }
+
+</style>

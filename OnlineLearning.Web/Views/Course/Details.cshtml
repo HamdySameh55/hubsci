@@ -1,0 +1,437 @@
+@model OnlineLearning.Business.DTOs.CourseDto
+
+@{
+    ViewData["Title"] = "Course Details";
+
+    int? currentUserId = null;
+
+    var userIdClaim = User.FindFirst(
+        System.Security.Claims.ClaimTypes.NameIdentifier);
+
+    if (userIdClaim != null)
+    {
+        currentUserId = int.Parse(userIdClaim.Value);
+    }
+
+    bool isCourseOwner =
+        User.IsInRole("Instructor") &&
+        currentUserId == Model.InstructorId;
+
+    bool canGetCertificate =
+        User.IsInRole("Student") &&
+        ViewBag.CanGetCertificate == true;
+
+    bool hasCertificate =
+        User.IsInRole("Student") &&
+        ViewBag.HasCertificate == true;
+
+    int? enrollmentId =
+        ViewBag.EnrollmentId != null
+            ? (int)ViewBag.EnrollmentId
+            : null;
+}
+
+<div class="min-vh-100 py-5"
+     style="background-color: #FAF7F2;">
+
+    <div class="container">
+
+        <!-- Error Message -->
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger rounded-4 mb-4"
+                 role="alert">
+                @TempData["Error"]
+            </div>
+        }
+
+        <!-- Success Message -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success rounded-4 mb-4"
+                 role="alert">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-lg-9 col-xl-8">
+
+                <!-- Course Details Card -->
+                <div class="bg-white border-0 rounded-4 shadow-sm overflow-hidden">
+
+                    <!-- Course Header -->
+                    <div class="p-4 p-md-5"
+                         style="background-color: #EDE9FE;">
+
+                        <div class="d-flex align-items-center
+                                    justify-content-center rounded-3 mb-4"
+                             style="
+                                 width: 64px;
+                                 height: 64px;
+                                 background-color: #FFFFFF;
+                                 color: #7C3AED;
+                             ">
+
+                            <span class="fw-bold fs-3">
+                                @(
+                                    string.IsNullOrWhiteSpace(Model.Title)
+                                        ? "C"
+                                        : Model.Title.Substring(0, 1).ToUpper()
+                                )
+                            </span>
+
+                        </div>
+
+                        <span class="badge rounded-pill px-3 py-2 mb-3"
+                              style="
+                                  background-color: #DCFCE7;
+                                  color: #16A34A;
+                                  font-weight: 600;
+                              ">
+                            @Model.Status
+                        </span>
+
+                        <h1 class="fw-bold mb-3"
+                            style="
+                                color: #18181B;
+                                letter-spacing: -0.5px;
+                            ">
+                            @Model.Title
+                        </h1>
+
+                        <p class="mb-0"
+                           style="
+                               color: #52525B;
+                               line-height: 1.8;
+                               font-size: 16px;
+                           ">
+                            @Model.Description
+                        </p>
+
+                    </div>
+
+
+                    <!-- Course Information -->
+                    <div class="p-4 p-md-5">
+
+                        <div class="row g-4">
+
+                            <!-- Price -->
+                            <div class="col-12 col-md-6">
+
+                                <div class="border rounded-4 p-4 h-100"
+                                     style="
+                                         border-color: #E4E4E7 !important;
+                                     ">
+
+                                    <p class="small mb-2"
+                                       style="color: #71717A;">
+                                        Course Price
+                                    </p>
+
+                                    <div class="d-flex align-items-baseline gap-1">
+
+                                        <span class="fw-bold fs-3"
+                                              style="color: #18181B;">
+                                            @Model.Price
+                                        </span>
+
+                                        <span class="small"
+                                              style="color: #71717A;">
+                                            USD
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Status -->
+                            <div class="col-12 col-md-6">
+
+                                <div class="border rounded-4 p-4 h-100"
+                                     style="
+                                         border-color: #E4E4E7 !important;
+                                     ">
+
+                                    <p class="small mb-2"
+                                       style="color: #71717A;">
+                                        Course Status
+                                    </p>
+
+                                    <span class="fw-semibold"
+                                          style="color: #16A34A;">
+                                        @Model.Status
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Instructor -->
+                            <div class="col-12">
+
+                                <div class="border rounded-4 p-4"
+                                     style="
+                                         border-color: #E4E4E7 !important;
+                                     ">
+
+                                    <p class="small mb-2"
+                                       style="color: #71717A;">
+                                        Instructor
+                                    </p>
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="d-flex align-items-center
+                                                    justify-content-center
+                                                    rounded-circle"
+                                             style="
+                                                 width: 44px;
+                                                 height: 44px;
+                                                 background-color: #EDE9FE;
+                                                 color: #7C3AED;
+                                             ">
+
+                                            <span class="fw-bold">
+                                                I
+                                            </span>
+
+                                        </div>
+
+                                        <div>
+
+                                            <div class="fw-semibold"
+                                                 style="color: #18181B;">
+                                                Instructor
+                                            </div>
+
+                                            <div class="small"
+                                                 style="color: #71717A;">
+                                                ID: @Model.InstructorId
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Certificate Earned -->
+                        @if (User.IsInRole("Student") &&
+                             hasCertificate)
+                        {
+                            <div class="mt-4 border rounded-4 p-4"
+                                 style="
+                                     background-color: #F0FDF4;
+                                     border-color: #BBF7D0 !important;
+                                 ">
+
+                                <div class="d-flex align-items-center
+                                            justify-content-between
+                                            flex-wrap gap-3">
+
+                                    <div>
+
+                                        <div class="fw-bold"
+                                             style="color: #166534;">
+                                            Certificate Earned
+                                        </div>
+
+                                        <div class="small mt-1"
+                                             style="color: #15803D;">
+                                            You have already received your
+                                            certificate for this course.
+                                        </div>
+
+                                    </div>
+
+                                    <a asp-controller="Certificate"
+                                       asp-action="Index"
+                                       class="btn px-4 py-2 fw-semibold"
+                                       style="
+                                           background-color: #DCFCE7;
+                                           color: #166534;
+                                           border: 1px solid #BBF7D0;
+                                           border-radius: 10px;
+                                       ">
+                                        View Certificate
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        }
+
+
+                        <!-- Actions -->
+                        <div class="d-flex flex-column flex-sm-row
+                                    gap-2 mt-5 pt-4 border-top"
+                             style="
+                                 border-color: #E4E4E7 !important;
+                             ">
+
+                            <!-- View Modules -->
+                            <a asp-controller="Module"
+                               asp-action="Index"
+                               asp-route-courseId="@Model.CourseId"
+                               class="btn px-4 py-2 fw-semibold text-white"
+                               style="
+                                   background-color: #7C3AED;
+                                   border: none;
+                                   border-radius: 10px;
+                               ">
+                                View Modules
+                            </a>
+
+
+                            <!-- Instructor Actions -->
+                            @if (isCourseOwner)
+                            {
+                                <a asp-controller="Module"
+                                   asp-action="Create"
+                                   asp-route-courseId="@Model.CourseId"
+                                   class="btn px-4 py-2 fw-semibold"
+                                   style="
+                                       background-color: #DCFCE7;
+                                       color: #16A34A;
+                                       border: 1px solid #BBF7D0;
+                                       border-radius: 10px;
+                                   ">
+                                    + Add Module
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@Model.CourseId"
+                                   class="btn px-4 py-2 fw-semibold"
+                                   style="
+                                       background-color: #FFF7ED;
+                                       color: #EA580C;
+                                       border: 1px solid #FED7AA;
+                                       border-radius: 10px;
+                                   ">
+                                    Edit Course
+                                </a>
+                            }
+
+
+                            <!-- Student Enrollment Action -->
+                            @if (User.IsInRole("Student") &&
+                                 Model.Status == "Published")
+                            {
+                                <form asp-controller="Enrollment"
+                                      asp-action="Create"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="CourseId"
+                                           value="@Model.CourseId" />
+
+                                    <button type="submit"
+                                            class="btn px-4 py-2 fw-semibold text-white"
+                                            style="
+                                                background-color: #7C3AED;
+                                                border: none;
+                                                border-radius: 10px;
+                                            ">
+                                        Enroll in Course
+                                    </button>
+
+                                </form>
+                            }
+
+
+                            <!-- Student Feedback Action -->
+                            @if (User.IsInRole("Student") &&
+                                 ViewBag.CanGiveFeedback == true)
+                            {
+                                <a asp-controller="Feedback"
+                                   asp-action="Create"
+                                   asp-route-courseId="@Model.CourseId"
+                                   class="btn px-4 py-2 fw-semibold"
+                                   style="
+                                       background-color: #EDE9FE;
+                                       color: #5B21B6;
+                                       border: 1px solid #DDD6FE;
+                                       border-radius: 10px;
+                                   ">
+                                    Give Feedback
+                                </a>
+                            }
+
+
+                            <!-- Get Certificate -->
+                            @if (canGetCertificate &&
+                                 enrollmentId.HasValue)
+                            {
+                                <form asp-controller="Certificate"
+                                      asp-action="Create"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="enrollmentId"
+                                           value="@enrollmentId.Value" />
+
+                                    <button type="submit"
+                                            class="btn px-4 py-2 fw-semibold"
+                                            style="
+                                                background-color: #FEF3C7;
+                                                color: #92400E;
+                                                border: 1px solid #FDE68A;
+                                                border-radius: 10px;
+                                            ">
+                                        Get Certificate
+                                    </button>
+
+                                </form>
+                            }
+
+
+                            <!-- Back -->
+                            <a asp-action="Index"
+                               class="btn px-4 py-2 fw-semibold"
+                               style="
+                                   background-color: #FFFFFF;
+                                   color: #7C3AED;
+                                   border: 1px solid #7C3AED;
+                                   border-radius: 10px;
+                               ">
+                                ← Back to Courses
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Footer -->
+                <p class="text-center small mt-4 mb-0"
+                   style="color: #71717A;">
+                    Start learning and build your skills.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

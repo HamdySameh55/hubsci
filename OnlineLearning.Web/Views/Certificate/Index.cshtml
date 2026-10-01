@@ -1,0 +1,285 @@
+@model IEnumerable<OnlineLearning.Business.DTOs.CertificateDto>
+
+@{
+ViewData["Title"] = "My Certificates";
+}
+
+<div class="container py-5">
+
+<!-- Header -->
+<div class="mb-5">
+
+    <div class="small fw-semibold mb-2"
+         style="color: #7C3AED;">
+        ACHIEVEMENTS
+    </div>
+
+    <h1 class="fw-bold mb-2"
+        style="color: #18181B;">
+        My Certificates
+    </h1>
+
+    <p class="mb-0"
+       style="color: #71717A;">
+        Certificates you earned after completing your courses.
+    </p>
+
+</div>
+
+
+<!-- Success Message -->
+@if (TempData["Success"] != null)
+{
+    <div class="custom-alert success-alert mb-4">
+        <div class="alert-icon success-icon">
+            ✓
+        </div>
+
+        <div>
+            <div class="fw-semibold"
+                 style="color: #166534;">
+                Success
+            </div>
+
+            <div class="small"
+                 style="color: #166534;">
+                @TempData["Success"]
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Error Message -->
+@if (TempData["Error"] != null)
+{
+    <div class="custom-alert error-alert mb-4">
+        <div class="alert-icon error-icon">
+            !
+        </div>
+
+        <div>
+            <div class="fw-semibold"
+                 style="color: #991B1B;">
+                Something went wrong
+            </div>
+
+            <div class="small"
+                 style="color: #991B1B;">
+                @TempData["Error"]
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (!Model.Any())
+{
+    <!-- Empty State -->
+    <div class="empty-certificates">
+
+        <div class="empty-icon">
+            ✓
+        </div>
+
+        <h4 class="fw-bold mb-2"
+            style="color: #18181B;">
+            No certificates yet
+        </h4>
+
+        <p class="mb-0"
+           style="color: #71717A;">
+            Complete one of your courses to earn a certificate.
+        </p>
+
+    </div>
+}
+else
+{
+    <!-- Certificates -->
+    <div class="row g-4">
+
+        @foreach (var certificate in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+
+                <div class="certificate-card h-100">
+
+                    <!-- Certificate Icon -->
+                    <div class="certificate-icon mb-4">
+                        <span>
+                            ✓
+                        </span>
+                    </div>
+
+
+                    <!-- Certificate Content -->
+                    <div class="mb-4">
+
+                        <div class="small fw-semibold mb-2"
+                             style="color: #7C3AED;">
+                            CERTIFICATE
+                        </div>
+
+                        <h5 class="fw-bold mb-3"
+                            style="color: #18181B;">
+                            Course Certificate
+                        </h5>
+
+                        <p class="small mb-1"
+                           style="color: #71717A;">
+                            Issued on
+                        </p>
+
+                        <p class="fw-semibold mb-0"
+                           style="color: #27272A;">
+                            @certificate.IssueDate.ToLocalTime().ToString("dd MMMM yyyy")
+                        </p>
+
+                    </div>
+
+
+                    <!-- Action -->
+                    <a asp-controller="Certificate"
+                       asp-action="Details"
+                       asp-route-id="@certificate.CertificateId"
+                       class="btn btn-purple w-100">
+                        View Certificate
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+
+</div>
+
+<style>
+
+    body {
+        background-color: #FAF7F2;
+    }
+
+    /* Certificate Card */
+
+    .certificate-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        padding: 26px;
+        transition: border-color 0.2s ease,
+                    box-shadow 0.2s ease,
+                    transform 0.2s ease;
+    }
+
+    .certificate-card:hover {
+        border-color: #DDD6FE;
+        box-shadow: 0 8px 24px rgba(24, 24, 27, 0.06);
+        transform: translateY(-2px);
+    }
+
+
+    /* Certificate Icon */
+
+    .certificate-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+
+    /* Button */
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+
+    /* Empty State */
+
+    .empty-certificates {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        padding: 64px 24px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 20px;
+        border-radius: 18px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 800;
+    }
+
+
+    /* Alerts */
+
+    .custom-alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 12px;
+    }
+
+    .success-alert {
+        background-color: #F0FDF4;
+        border: 1px solid #BBF7D0;
+    }
+
+    .error-alert {
+        background-color: #FEF2F2;
+        border: 1px solid #FECACA;
+    }
+
+    .alert-icon {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+
+    .success-icon {
+        background-color: #DCFCE7;
+        color: #16A34A;
+    }
+
+    .error-icon {
+        background-color: #FEE2E2;
+        color: #DC2626;
+    }
+
+</style>

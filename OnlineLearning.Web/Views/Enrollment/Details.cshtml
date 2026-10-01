@@ -1,0 +1,241 @@
+@model OnlineLearning.Business.DTOs.EnrollmentDto
+
+@{
+    ViewData["Title"] = "Enrollment Details";
+}
+
+<div class="min-vh-100 py-5"
+     style="background-color: #FAF7F2;">
+
+    <div class="container">
+
+        <!-- Error Message -->
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger rounded-4 mb-4"
+                 role="alert">
+                @TempData["Error"]
+            </div>
+        }
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+
+                        <div class="d-flex align-items-center
+                                    justify-content-center
+                                    rounded-circle mx-auto mb-3"
+                             style="
+                                 width: 64px;
+                                 height: 64px;
+                                 background-color: #EDE9FE;
+                                 color: #7C3AED;
+                             ">
+
+                            <span class="fw-bold fs-3">
+                                ✓
+                            </span>
+
+                        </div>
+
+                        <h2 class="fw-bold mb-2"
+                            style="color: #18181B;">
+                            Enrollment Created
+                        </h2>
+
+                        <p class="mb-0"
+                           style="color: #71717A;">
+                            Your enrollment has been created successfully.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Enrollment Information -->
+                    <div class="border rounded-4 p-4 mb-4"
+                         style="border-color: #E4E4E7 !important;">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center mb-3">
+
+                            <span style="color: #71717A;">
+                                Enrollment ID
+                            </span>
+
+                            <span class="fw-semibold"
+                                  style="color: #18181B;">
+                                #@Model.EnrollmentId
+                            </span>
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center mb-3">
+
+                            <span style="color: #71717A;">
+                                Course ID
+                            </span>
+
+                            <span class="fw-semibold"
+                                  style="color: #18181B;">
+                                #@Model.CourseId
+                            </span>
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center mb-3">
+
+                            <span style="color: #71717A;">
+                                Enrollment Date
+                            </span>
+
+                            <span class="fw-semibold"
+                                  style="color: #18181B;">
+                                @Model.EnrollmentDate.ToLocalTime().ToString("dd MMMM yyyy")
+                            </span>
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-between
+                                    align-items-center">
+
+                            <span style="color: #71717A;">
+                                Status
+                            </span>
+
+                            <span class="badge rounded-pill px-3 py-2"
+                                  style="
+                                      background-color: #FEF3C7;
+                                      color: #92400E;
+                                      font-weight: 600;
+                                  ">
+                                @Model.Status
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Payment Notice -->
+                    @if (Model.Status == "Pending")
+                    {
+                        <div class="rounded-4 p-4 mb-4"
+                             style="
+                                 background-color: #EDE9FE;
+                                 color: #52525B;
+                             ">
+
+                            <div class="fw-semibold mb-1"
+                                 style="color: #7C3AED;">
+                                Payment Required
+                            </div>
+
+                            <p class="mb-0 small">
+                                Your enrollment is currently pending.
+                                Complete the payment to activate your
+                                enrollment and access the course content.
+                            </p>
+
+                        </div>
+                    }
+                    else if (Model.Status == "Active")
+                    {
+                        <div class="rounded-4 p-4 mb-4"
+                             style="
+                                 background-color: #DCFCE7;
+                                 color: #166534;
+                             ">
+
+                            <div class="fw-semibold mb-1">
+                                Payment Successful
+                            </div>
+
+                            <p class="mb-0 small">
+                                Your payment was successful.
+                                Your enrollment is now active and you can
+                                access the course content.
+                            </p>
+
+                        </div>
+                    }
+
+
+                    <!-- Actions -->
+                    <div class="d-flex flex-column gap-2">
+
+                        @if (Model.Status == "Pending")
+                        {
+                            <a asp-controller="Payment"
+                               asp-action="Details"
+                               asp-route-enrollmentId="@Model.EnrollmentId"
+                               class="btn fw-semibold text-white py-2"
+                               style="
+                                   background-color: #7C3AED;
+                                   border: none;
+                                   border-radius: 10px;
+                               ">
+                                Pay with InstaPay
+                            </a>
+                        }
+
+                        @if (Model.Status == "Active")
+                        {
+                            <a asp-controller="Module"
+                               asp-action="Index"
+                               asp-route-courseId="@Model.CourseId"
+                               class="btn fw-semibold text-white py-2"
+                               style="
+                                   background-color: #7C3AED;
+                                   border: none;
+                                   border-radius: 10px;
+                               ">
+                                Start Learning
+                            </a>
+                        }
+
+                        <a asp-controller="Course"
+                           asp-action="Details"
+                           asp-route-id="@Model.CourseId"
+                           class="btn fw-semibold py-2"
+                           style="
+                               background-color: #FFFFFF;
+                               color: #7C3AED;
+                               border: 1px solid #7C3AED;
+                               border-radius: 10px;
+                           ">
+                            Back to Course
+                        </a>
+
+                        <a asp-controller="Course"
+                           asp-action="Index"
+                           class="btn fw-semibold py-2"
+                           style="
+                               background-color: #FFFFFF;
+                               color: #7C3AED;
+                               border: 1px solid #7C3AED;
+                               border-radius: 10px;
+                           ">
+                            ← Back to Courses
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

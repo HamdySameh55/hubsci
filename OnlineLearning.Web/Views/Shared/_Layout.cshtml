@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Hub Sci</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+</head>
+
+
+<body style="background-color: #FAF7F2;">
+
+    <!-- =========================
+         Navbar
+         ========================= -->
+
+    <header>
+
+        <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
+
+            <div class="container">
+
+                <!-- Brand -->
+
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   style="
+                       color: #7C3AED;
+                       font-size: 1.35rem;">
+
+                    <img src="~/images/Gemini_Generated_Image_snsprxsnsprxsnsp-removebg-preview.png"
+                         alt="Hub Sci logo"
+                         class="hub-sci-logo-nav" />
+
+                    <span>
+                        Hub Sci
+                    </span>
+
+                </a>
+
+
+                <!-- Mobile Button -->
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+
+                <!-- Navbar Content -->
+
+                <div class="collapse navbar-collapse"
+                     id="mainNavbar">
+
+
+                    <!-- Left Side -->
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <!-- Home -->
+
+                        <li class="nav-item">
+
+                            <a class="nav-link fw-semibold"
+                               asp-controller="Home"
+                               asp-action="Index">
+
+                                Home
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Courses -->
+
+                        <li class="nav-item">
+
+                            <a class="nav-link fw-semibold"
+                               asp-controller="Course"
+                               asp-action="Index">
+
+                                Courses
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- About Us -->
+
+                        <li class="nav-item">
+
+                            <a class="nav-link fw-semibold"
+                               asp-controller="About"
+                               asp-action="Index">
+
+                                About Us
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Contact Us -->
+
+                        <li class="nav-item">
+
+                            <a class="nav-link fw-semibold"
+                               asp-controller="Contact"
+                               asp-action="Index">
+
+                                Contact Us
+
+                            </a>
+
+                        </li>
+
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+
+                            <!-- =========================
+                                 Student
+                                 ========================= -->
+
+                            @if (User.IsInRole("Student"))
+                            {
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link fw-semibold"
+                                       asp-controller="Enrollment"
+                                       asp-action="Index">
+
+                                        My Enrollments
+
+                                    </a>
+
+                                </li>
+
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link fw-semibold"
+                                       asp-controller="LessonProgress"
+                                       asp-action="Index">
+
+                                        My Progress
+
+                                    </a>
+
+                                </li>
+
+                            }
+
+
+                            <!-- =========================
+                                 Instructor
+                                 ========================= -->
+
+                            @if (User.IsInRole("Instructor"))
+                            {
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link fw-semibold"
+                                       asp-controller="Payment"
+                                       asp-action="Pending">
+
+                                        Pending Payments
+
+                                    </a>
+
+                                </li>
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link fw-semibold"
+                                       asp-controller="Course"
+                                       asp-action="Index">
+
+                                        My Courses
+
+                                    </a>
+
+                                </li>
+
+                            }
+
+
+                            <!-- =========================
+                                 Admin
+                                 ========================= -->
+
+                            @if (User.IsInRole("Admin"))
+                            {
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link fw-semibold"
+                                       asp-controller="Admin"
+                                       asp-action="Dashboard">
+
+                                        Dashboard
+
+                                    </a>
+
+                                </li>
+
+                            }
+
+                        }
+
+                    </ul>
+
+
+                    <!-- =========================
+                         Right Side
+                         ========================= -->
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+
+                            <!-- User Name -->
+
+                            <span class="small fw-semibold me-2"
+                                  style="color: #3F3F46;">
+
+                                Hello,
+                                @User.Identity.Name
+
+                            </span>
+
+
+                            <!-- Logout -->
+
+                            <form asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-sm px-3 fw-semibold"
+                                        style="
+                                            background-color: #18181B;
+                                            color: white;
+                                            border: none;
+                                            border-radius: 8px;">
+
+                                    Logout
+
+                                </button>
+
+                            </form>
+
+                        }
+
+                        else
+                        {
+
+                            <!-- =========================
+                                 Guest
+                                 ========================= -->
+
+                            <a asp-controller="Account"
+                               asp-action="Login"
+                               class="btn btn-sm px-3 fw-semibold"
+                               style="
+                                   background-color: white;
+                                   color: #7C3AED;
+                                   border: 1px solid #DDD6FE;
+                                   border-radius: 8px;">
+
+                                Login
+
+                            </a>
+
+
+                            <a asp-controller="Account"
+                               asp-action="Register"
+                               class="btn btn-sm px-3 fw-semibold"
+                               style="
+                                   background-color: #7C3AED;
+                                   color: white;
+                                   border: none;
+                                   border-radius: 8px;">
+
+                                Register
+
+                            </a>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         Main Content
+         ========================= -->
+
+    <main role="main">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =========================
+         Footer
+         ========================= -->
+
+    <footer class="border-top mt-5 py-4"
+            style="background-color: white;">
+
+        <div class="container">
+
+            <div class="row align-items-center g-3">
+
+
+                <!-- Footer Brand -->
+
+                <div class="col-12 col-md-6">
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="text-decoration-none">
+
+                        <div class="d-flex align-items-center gap-2 fw-bold"
+                             style="
+                                 color: #7C3AED;
+                                 font-size: 1.15rem;">
+
+                            <img src="~/images/Gemini_Generated_Image_snsprxsnsprxsnsp-removebg-preview.png"
+                                 alt="Hub Sci logo"
+                                 class="hub-sci-logo-footer" />
+
+                            <span>
+                                Hub Sci
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <div class="small mt-1"
+                         style="color: #71717A;">
+
+                        Learn. Grow. Succeed.
+
+                    </div>
+
+                </div>
+
+
+                <!-- Footer Links -->
+
+                <div class="col-12 col-md-6 text-md-end">
+
+                    <a asp-controller="About"
+                       asp-action="Index"
+                       class="text-decoration-none small"
+                       style="color: #71717A;">
+
+                        About Us
+
+                    </a>
+
+
+                    <span class="mx-2"
+                          style="color: #D4D4D8;">
+
+                        |
+
+                    </span>
+
+
+                    <a asp-controller="Contact"
+                       asp-action="Index"
+                       class="text-decoration-none small"
+                       style="color: #71717A;">
+
+                        Contact Us
+
+                    </a>
+
+
+                    <span class="mx-2"
+                          style="color: #D4D4D8;">
+
+                        |
+
+                    </span>
+
+
+                    <a asp-controller="Home"
+                       asp-action="Privacy"
+                       class="text-decoration-none small"
+                       style="color: #71717A;">
+
+                        Privacy
+
+                    </a>
+
+
+                    <span class="mx-2"
+                          style="color: #D4D4D8;">
+
+                        |
+
+                    </span>
+
+
+                    <span class="small"
+                          style="color: #A1A1AA;">
+
+                        © 2026 Hub Sci
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         Scripts
+         ========================= -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+
+</body>
+
+</html>

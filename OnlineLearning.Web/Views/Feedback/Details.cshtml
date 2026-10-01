@@ -1,0 +1,310 @@
+@model OnlineLearning.Business.DTOs.FeedbackDto
+
+@{
+    ViewData["Title"] = "Feedback Details";
+}
+
+<style>
+    body {
+        background-color: #FAF7F2;
+    }
+
+    .back-link {
+        color: #7C3AED;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: #5B21B6;
+    }
+
+    .feedback-details-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(24, 24, 27, 0.05);
+        overflow: hidden;
+    }
+
+    .feedback-details-header {
+        padding: 28px 30px 22px;
+        border-bottom: 1px solid #E4E4E7;
+    }
+
+    .feedback-details-body {
+        padding: 30px;
+    }
+
+    .feedback-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #EDE9FE;
+        color: #7C3AED;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 16px;
+    }
+
+    .section-label {
+        color: #7C3AED;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+    }
+
+    .page-title {
+        color: #18181B;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .page-description {
+        color: #71717A;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+
+    .info-label {
+        color: #71717A;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #18181B;
+        font-weight: 600;
+    }
+
+    .status-badge {
+        background: #EDE9FE;
+        color: #5B21B6;
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .rating-value {
+        color: #7C3AED;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .comment-box {
+        background: #FAF7F2;
+        border: 1px solid #E4E4E7;
+        border-radius: 12px;
+        padding: 16px;
+        color: #18181B;
+        line-height: 1.7;
+    }
+
+    .empty-comment {
+        color: #71717A;
+        font-style: italic;
+    }
+
+    .divider {
+        border-color: #E4E4E7;
+        opacity: 1;
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-light-custom {
+        background: #F4F4F5;
+        border: 1px solid #E4E4E7;
+        color: #18181B;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-light-custom:hover {
+        background: #E4E4E7;
+        border-color: #D4D4D8;
+        color: #18181B;
+    }
+</style>
+
+<div class="container py-5">
+
+    <div class="mb-4">
+        <a asp-controller="Feedback"
+           asp-action="Index"
+           class="back-link">
+            ← Back to My Feedback
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-9 col-lg-7">
+
+            <div class="mb-4">
+
+                <div class="section-label">
+                    COURSE FEEDBACK
+                </div>
+
+                <h1 class="page-title">
+                    Feedback Details
+                </h1>
+
+                <p class="page-description">
+                    View the feedback you submitted for this course.
+                </p>
+
+            </div>
+
+            <div class="feedback-details-card">
+
+                <div class="feedback-details-header">
+
+                    <div class="feedback-icon">
+                        ★
+                    </div>
+
+                    <h5 class="fw-bold mb-1">
+                        Your Feedback
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Review the rating and comment you submitted.
+                    </p>
+
+                </div>
+
+                <div class="feedback-details-body">
+
+                    <div class="d-flex flex-column flex-sm-row
+                                justify-content-between
+                                align-items-sm-center
+                                gap-3 mb-4">
+
+                        <div>
+                            <div class="info-label">
+                                Course
+                            </div>
+
+                            <div class="info-value">
+                                Course #@Model.CourseId
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="status-badge">
+                                @Model.Status
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <hr class="divider mb-4" />
+
+                    @if (Model.Rating > 0)
+                    {
+                        <div class="mb-4">
+
+                            <div class="info-label">
+                                Rating
+                            </div>
+
+                            <div class="rating-value">
+                                @Model.Rating / 5
+                            </div>
+
+                        </div>
+                    }
+
+                    <div class="mb-4">
+
+                        <div class="info-label">
+                            Comment
+                        </div>
+
+                        @if (string.IsNullOrWhiteSpace(Model.Comment))
+                        {
+                            <div class="comment-box empty-comment">
+                                No comment was provided.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="comment-box">
+                                @Model.Comment
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <div class="info-label">
+                            Submitted On
+                        </div>
+
+                        <div class="info-value">
+                            @Model.CreatedAt.ToLocalTime().ToString("dd MMMM yyyy")
+                        </div>
+
+                    </div>
+
+                    <hr class="divider mb-4" />
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+
+                        <a asp-controller="Feedback"
+                           asp-action="Edit"
+                           asp-route-id="@Model.FeedbackId"
+                           class="btn btn-purple">
+                            Edit Feedback
+                        </a>
+
+                        <form asp-controller="Feedback"
+                              asp-action="Delete"
+                              asp-route-id="@Model.FeedbackId"
+                              method="post"
+                              onsubmit="return confirm('Are you sure you want to delete this feedback?');">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-light-custom w-100">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

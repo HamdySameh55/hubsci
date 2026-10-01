@@ -1,0 +1,212 @@
+@model OnlineLearning.Business.DTOs.CreateQuizDto
+
+@{
+    ViewData["Title"] = "Create Quiz";
+}
+
+<style>
+    .quiz-create-page {
+        background-color: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .quiz-create-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .quiz-create-header {
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .quiz-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background-color: #FFFFFF;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .quiz-title {
+        color: #18181B;
+    }
+
+    .quiz-description {
+        color: #52525B;
+    }
+
+    .form-label {
+        color: #27272A;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border: 1px solid #D4D4D8;
+        border-radius: 10px;
+        padding: 12px 14px;
+    }
+
+    .form-control:focus {
+        border-color: #A78BFA;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .btn-create {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 11px 24px;
+    }
+
+    .btn-create:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-cancel {
+        border: 1px solid #D4D4D8;
+        color: #3F3F46;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 11px 24px;
+    }
+
+    .btn-cancel:hover {
+        background-color: #F4F4F5;
+        color: #18181B;
+    }
+</style>
+
+<div class="quiz-create-page py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-lg-7">
+
+                <div class="quiz-create-card shadow-sm">
+
+                    <!-- Header -->
+
+                    <div class="quiz-create-header p-4 p-md-5">
+
+                        <div class="quiz-icon mb-4">
+                            Q
+                        </div>
+
+                        <h1 class="quiz-title fw-bold mb-2">
+                            Create Quiz
+                        </h1>
+
+                        <p class="quiz-description mb-0">
+                            Create a quiz for the students in this module.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Form -->
+
+                    <div class="p-4 p-md-5">
+
+                        <form asp-controller="Quiz"
+                              asp-action="Create"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="moduleId"
+                                   value="@ViewBag.ModuleId" />
+
+
+                            <!-- Title -->
+
+                            <div class="mb-4">
+
+                                <label asp-for="Title"
+                                       class="form-label mb-2">
+                                    Quiz Title
+                                </label>
+
+                                <input asp-for="Title"
+                                       class="form-control"
+                                       placeholder="Enter quiz title" />
+
+                                <span asp-validation-for="Title"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Description -->
+
+                            <div class="mb-4">
+
+                                <label asp-for="Description"
+                                       class="form-label mb-2">
+                                    Description
+                                </label>
+
+                                <textarea asp-for="Description"
+                                          class="form-control"
+                                          rows="5"
+                                          placeholder="Enter quiz description">
+                                </textarea>
+
+                                <span asp-validation-for="Description"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Buttons -->
+
+                            <div class="d-flex justify-content-end gap-2">
+
+                                <a asp-controller="Module"
+                                   asp-action="Details"
+                                   asp-route-id="@ViewBag.ModuleId"
+                                   class="btn btn-cancel">
+                                    Cancel
+                                </a>
+
+                                <button type="submit"
+                                        class="btn btn-create">
+                                    Create Quiz
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

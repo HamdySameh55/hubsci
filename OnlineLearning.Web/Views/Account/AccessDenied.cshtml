@@ -1,0 +1,58 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="min-vh-100 d-flex align-items-center py-5"
+     style="background-color: #FAF7F2;">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-7 col-lg-5">
+
+                <div class="bg-white border rounded-4 p-4 p-md-5 text-center shadow-sm">
+
+                    <div class="d-flex align-items-center
+                                justify-content-center
+                                rounded-circle
+                                mx-auto
+                                mb-4"
+                         style="
+                             width: 80px;
+                             height: 80px;
+                             background-color: #FEE2E2;
+                             color: #DC2626;">
+
+                        <span class="fw-bold fs-1">!</span>
+
+                    </div>
+
+                    <h1 class="fw-bold mb-3"
+                        style="color: #18181B;">
+                        Access Denied
+                    </h1>
+
+                    <p class="mb-4"
+                       style="color: #71717A;">
+                        You do not have permission to access this page.
+                        If you believe this is a mistake, contact your
+                        administrator.
+                    </p>
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="btn px-4 py-2 fw-semibold"
+                       style="
+                           background-color: #7C3AED;
+                           color: white;
+                           border: none;
+                           border-radius: 10px;">
+                        Back to Home
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,494 @@
+@model OnlineLearning.Business.DTOs.QuizDto
+
+@{
+ViewData["Title"] = "Edit Quiz";
+}
+
+<style>
+    .edit-quiz-page {
+        background-color: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .quiz-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .quiz-card-header {
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+        padding: 24px;
+    }
+
+    .quiz-card-body {
+        padding: 24px;
+    }
+
+    .section-label {
+        color: #7C3AED;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+    }
+
+    .page-title,
+    .section-title {
+        color: #18181B;
+    }
+
+    .page-description,
+    .section-description {
+        color: #71717A;
+        line-height: 1.7;
+    }
+
+    .custom-input {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+        background-color: #FFFFFF;
+        color: #18181B;
+    }
+
+    .custom-input:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+    }
+
+    .form-label {
+        color: #27272A;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 600;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background-color: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        padding: 9px 18px;
+        font-weight: 600;
+    }
+
+    .btn-outline-purple:hover {
+        background-color: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .question-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 16px;
+        padding: 20px;
+        transition: border-color 0.2s ease,
+                    transform 0.2s ease;
+    }
+
+    .question-card:hover {
+        border-color: #C4B5FD;
+        transform: translateY(-1px);
+    }
+
+    .question-number {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 14px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+
+    .question-text {
+        color: #18181B;
+        line-height: 1.6;
+    }
+
+    .question-meta {
+        color: #71717A;
+    }
+
+    .empty-questions {
+        background-color: #FFFFFF;
+        border: 1px dashed #D4D4D8;
+        border-radius: 18px;
+        padding: 48px 24px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 18px;
+        border-radius: 16px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .btn-delete-outline {
+        background-color: #FFFFFF;
+        border: 1px solid #FCA5A5;
+        color: #DC2626;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 600;
+    }
+
+    .btn-delete-outline:hover {
+        background-color: #FEF2F2;
+        border-color: #EF4444;
+        color: #B91C1C;
+    }
+
+    .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .modal-header-purple {
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+</style>
+
+<div class="edit-quiz-page py-5">
+
+<div class="container">
+
+    <!-- Page Header -->
+    <div class="d-flex flex-column flex-md-row
+                justify-content-between
+                align-items-md-center
+                gap-3 mb-5">
+
+        <div>
+
+            <div class="section-label mb-2">
+                QUIZ MANAGEMENT
+            </div>
+
+            <h1 class="page-title fw-bold mb-2">
+                Edit Quiz
+            </h1>
+
+            <p class="page-description mb-0">
+                Manage your quiz information and questions.
+            </p>
+
+        </div>
+
+        <a asp-controller="Module"
+           asp-action="Details"
+           asp-route-id="@Model.ModuleId"
+           class="btn btn-outline-purple">
+            ← Back to Module
+        </a>
+
+    </div>
+
+    <!-- Quiz Information -->
+    <div class="quiz-card mb-5">
+
+        <div class="quiz-card-header">
+
+            <h4 class="section-title fw-bold mb-1">
+                Quiz Information
+            </h4>
+
+            <p class="section-description small mb-0">
+                Update the basic information of your quiz.
+            </p>
+
+        </div>
+
+        <div class="quiz-card-body">
+
+            <form asp-controller="Quiz"
+                  asp-action="Edit"
+                  asp-route-id="@Model.QuizId"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="ModuleId"
+                       value="@Model.ModuleId" />
+
+                <!-- Title -->
+                <div class="mb-4">
+
+                    <label for="Title"
+                           class="form-label">
+                        Quiz Title
+                    </label>
+
+                    <input type="text"
+                           id="Title"
+                           name="Title"
+                           value="@Model.Title"
+                           class="form-control custom-input"
+                           placeholder="Enter quiz title"
+                           required />
+
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+
+                    <label for="Description"
+                           class="form-label">
+                        Description
+                    </label>
+
+                    <textarea id="Description"
+                              name="Description"
+                              class="form-control custom-input"
+                              rows="4"
+                              placeholder="Enter quiz description"
+                              required>@Model.Description</textarea>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex flex-column flex-sm-row
+                            justify-content-between
+                            gap-3">
+
+                    <button type="button"
+                            class="btn btn-delete-outline"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteQuizModal">
+                        Delete Quiz
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-purple">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Questions -->
+    <div class="questions-section">
+
+        <div class="d-flex flex-column flex-sm-row
+                    justify-content-between
+                    align-items-sm-center
+                    gap-3 mb-4">
+
+            <div>
+
+                <h4 class="section-title fw-bold mb-1">
+                    Questions
+                </h4>
+
+                <p class="section-description small mb-0">
+                    Add and manage the questions for this quiz.
+                </p>
+
+            </div>
+
+            <a asp-controller="Question"
+               asp-action="Create"
+               asp-route-quizId="@Model.QuizId"
+               class="btn btn-purple">
+                + Add Question
+            </a>
+
+        </div>
+
+        @if (Model.Questions == null ||
+             !Model.Questions.Any())
+        {
+            <!-- Empty Questions -->
+            <div class="empty-questions">
+
+                <div class="empty-icon">
+                    ?
+                </div>
+
+                <h5 class="fw-bold mb-2 page-title">
+                    No questions yet
+                </h5>
+
+                <p class="small section-description mb-4">
+                    Start building your quiz by adding your first question.
+                </p>
+
+                <a asp-controller="Question"
+                   asp-action="Create"
+                   asp-route-quizId="@Model.QuizId"
+                   class="btn btn-purple">
+                    + Add First Question
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column gap-3">
+
+                @foreach (var question in Model.Questions)
+                {
+                    <div class="question-card">
+
+                        <div class="d-flex flex-column flex-md-row
+                                    justify-content-between
+                                    gap-4">
+
+                            <div class="d-flex gap-3">
+
+                                <div class="question-number">
+                                    Q
+                                </div>
+
+                                <div>
+
+                                    <div class="section-label mb-1">
+                                        QUESTION
+                                    </div>
+
+                                    <h5 class="question-text fw-bold mb-2">
+                                        @question.QuestionText
+                                    </h5>
+
+                                    <div class="question-meta small">
+                                        Question ID: @question.QuestionId
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex align-items-start">
+
+                                <a asp-controller="Question"
+                                   asp-action="Edit"
+                                   asp-route-id="@question.QuestionId"
+                                   class="btn btn-outline-purple">
+                                    Edit
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- Delete Confirmation Modal -->
+
+<div class="modal fade"
+     id="deleteQuizModal"
+     tabindex="-1"
+     aria-labelledby="deleteQuizModalLabel"
+     aria-hidden="true">
+
+<div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content shadow-sm">
+
+        <div class="modal-header modal-header-purple">
+
+            <h5 class="modal-title fw-bold"
+                id="deleteQuizModalLabel"
+                style="color: #18181B;">
+                Delete Quiz
+            </h5>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+        <div class="modal-body p-4">
+
+            <p class="mb-2"
+               style="color: #27272A;">
+                Are you sure you want to delete this quiz?
+            </p>
+
+            <p class="small mb-0"
+               style="color: #71717A;">
+                This action cannot be undone.
+            </p>
+
+        </div>
+
+        <div class="modal-footer"
+             style="border-top: 1px solid #E4E4E7;">
+
+            <button type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal">
+                Cancel
+            </button>
+
+            <form asp-controller="Quiz"
+                  asp-action="Delete"
+                  asp-route-id="@Model.QuizId"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    Delete Quiz
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>

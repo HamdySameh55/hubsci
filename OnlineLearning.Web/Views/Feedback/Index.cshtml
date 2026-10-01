@@ -1,0 +1,402 @@
+@model IEnumerable<OnlineLearning.Business.DTOs.FeedbackDto>
+
+@{
+ViewData["Title"] = "My Feedback";
+}
+
+<div class="container py-5">
+
+<!-- Header -->
+<div class="mb-5">
+
+    <div class="small fw-semibold mb-2"
+         style="color: #7C3AED;">
+        COURSE FEEDBACK
+    </div>
+
+    <h1 class="fw-bold mb-2"
+        style="color: #18181B;">
+        My Feedback
+    </h1>
+
+    <p class="mb-0"
+       style="color: #71717A;">
+        View and manage the feedback you submitted for your courses.
+    </p>
+
+</div>
+
+
+<!-- Success Message -->
+@if (TempData["Success"] != null)
+{
+    <div class="custom-alert success-alert mb-4">
+
+        <div class="alert-icon success-icon">
+            ✓
+        </div>
+
+        <div>
+            <div class="fw-semibold"
+                 style="color: #166534;">
+                Success
+            </div>
+
+            <div class="small"
+                 style="color: #166534;">
+                @TempData["Success"]
+            </div>
+        </div>
+
+    </div>
+}
+
+
+<!-- Error Message -->
+@if (TempData["Error"] != null)
+{
+    <div class="custom-alert error-alert mb-4">
+
+        <div class="alert-icon error-icon">
+            !
+        </div>
+
+        <div>
+            <div class="fw-semibold"
+                 style="color: #991B1B;">
+                Something went wrong
+            </div>
+
+            <div class="small"
+                 style="color: #991B1B;">
+                @TempData["Error"]
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@if (!Model.Any())
+{
+    <!-- Empty State -->
+    <div class="empty-feedback">
+
+        <div class="empty-icon">
+            💬
+        </div>
+
+        <h4 class="fw-bold mb-2"
+            style="color: #18181B;">
+            No feedback yet
+        </h4>
+
+        <p class="mb-0"
+           style="color: #71717A;">
+            You haven't submitted any course feedback yet.
+        </p>
+
+    </div>
+}
+else
+{
+    <!-- Feedback Cards -->
+    <div class="row g-4">
+
+        @foreach (var feedback in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+
+                <div class="feedback-card h-100">
+
+                    <!-- Card Header -->
+                    <div class="d-flex justify-content-between
+                                align-items-start gap-3 mb-4">
+
+                        <div>
+
+                            <div class="small mb-1"
+                                 style="color: #71717A;">
+                                Course
+                            </div>
+
+                            <div class="fw-bold"
+                                 style="color: #18181B;">
+                                Course #@feedback.CourseId
+                            </div>
+
+                        </div>
+
+                        <span class="status-badge">
+                            @feedback.Status
+                        </span>
+
+                    </div>
+
+
+                    <!-- Rating -->
+                    @if (feedback.Rating > 0)
+                    {
+                        <div class="rating-section mb-4">
+
+                            <div class="small mb-2"
+                                 style="color: #71717A;">
+                                Rating
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <div class="rating-stars">
+                                    ★
+                                </div>
+
+                                <div class="fw-bold"
+                                     style="color: #18181B;">
+                                    @feedback.Rating / 5
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+
+                    <!-- Comment -->
+                    @if (!string.IsNullOrWhiteSpace(feedback.Comment))
+                    {
+                        <div class="comment-section mb-4">
+
+                            <div class="small mb-2"
+                                 style="color: #71717A;">
+                                Comment
+                            </div>
+
+                            <p class="mb-0"
+                               style="color: #27272A;
+                                      line-height: 1.6;">
+                                @feedback.Comment
+                            </p>
+
+                        </div>
+                    }
+
+
+                    <!-- Date -->
+                    <div class="feedback-date mb-4">
+
+                        Submitted:
+                        <span>
+                            @feedback.CreatedAt.ToLocalTime().ToString("dd MMMM yyyy")
+                        </span>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-2 mt-auto">
+
+                        <a asp-controller="Feedback"
+                           asp-action="Details"
+                           asp-route-id="@feedback.FeedbackId"
+                           class="btn btn-purple btn-sm flex-grow-1">
+                            View
+                        </a>
+
+                        <a asp-controller="Feedback"
+                           asp-action="Edit"
+                           asp-route-id="@feedback.FeedbackId"
+                           class="btn btn-soft-purple btn-sm">
+                            Edit
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+
+</div>
+
+<style>
+
+    body {
+        background-color: #FAF7F2;
+    }
+
+
+    /* Feedback Card */
+
+    .feedback-card {
+        display: flex;
+        flex-direction: column;
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        padding: 26px;
+        transition: border-color 0.2s ease,
+                    box-shadow 0.2s ease,
+                    transform 0.2s ease;
+    }
+
+    .feedback-card:hover {
+        border-color: #DDD6FE;
+        box-shadow: 0 8px 24px rgba(24, 24, 27, 0.06);
+        transform: translateY(-2px);
+    }
+
+
+    /* Status */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background-color: #EDE9FE;
+        color: #5B21B6;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* Rating */
+
+    .rating-section {
+        padding: 14px 16px;
+        background-color: #FAF7F2;
+        border: 1px solid #E4E4E7;
+        border-radius: 12px;
+    }
+
+    .rating-stars {
+        color: #F59E0B;
+        font-size: 18px;
+        line-height: 1;
+    }
+
+
+    /* Comment */
+
+    .comment-section {
+        padding-bottom: 4px;
+    }
+
+
+    /* Date */
+
+    .feedback-date {
+        color: #71717A;
+        font-size: 13px;
+        margin-top: auto;
+    }
+
+    .feedback-date span {
+        color: #27272A;
+        font-weight: 600;
+    }
+
+
+    /* Buttons */
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 9px;
+        padding: 8px 16px;
+        font-weight: 600;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-soft-purple {
+        background-color: #EDE9FE;
+        border: 1px solid #EDE9FE;
+        color: #5B21B6;
+        border-radius: 9px;
+        padding: 8px 16px;
+        font-weight: 600;
+    }
+
+    .btn-soft-purple:hover {
+        background-color: #DDD6FE;
+        border-color: #DDD6FE;
+        color: #5B21B6;
+    }
+
+
+    /* Empty State */
+
+    .empty-feedback {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        padding: 64px 24px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 20px;
+        border-radius: 18px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+
+    /* Alerts */
+
+    .custom-alert {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 12px;
+    }
+
+    .success-alert {
+        background-color: #F0FDF4;
+        border: 1px solid #BBF7D0;
+    }
+
+    .error-alert {
+        background-color: #FEF2F2;
+        border: 1px solid #FECACA;
+    }
+
+    .alert-icon {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+
+    .success-icon {
+        background-color: #DCFCE7;
+        color: #16A34A;
+    }
+
+    .error-icon {
+        background-color: #FEE2E2;
+        color: #DC2626;
+    }
+
+</style>

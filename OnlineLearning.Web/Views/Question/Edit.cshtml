@@ -1,0 +1,631 @@
+@model OnlineLearning.Business.DTOs.QuestionDto
+
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row
+                justify-content-between
+                align-items-md-center
+                gap-3 mb-5">
+
+        <div>
+            <div class="small fw-semibold mb-2"
+                 style="color: #7C3AED;">
+                QUESTION MANAGEMENT
+            </div>
+
+            <h1 class="fw-bold mb-2"
+                style="color: #18181B;">
+                Edit Question
+            </h1>
+
+            <p class="mb-0"
+               style="color: #71717A;">
+                Update the question and manage its answers.
+            </p>
+        </div>
+
+        <a asp-controller="Quiz"
+           asp-action="Edit"
+           asp-route-id="@Model.QuizId"
+           class="btn btn-outline-purple">
+            ← Back to Quiz
+        </a>
+
+    </div>
+
+
+    <!-- Question Card -->
+
+    <div class="question-card mb-5">
+
+        <div class="question-card-header">
+
+            <div class="question-number">
+                Q
+            </div>
+
+            <div>
+                <h4 class="fw-bold mb-1"
+                    style="color: #18181B;">
+                    Question Information
+                </h4>
+
+                <p class="small mb-0"
+                   style="color: #71717A;">
+                    Update the question text below.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="question-card-body">
+
+            <form asp-controller="Question"
+                  asp-action="Edit"
+                  asp-route-id="@Model.QuestionId"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-4">
+                </div>
+
+
+                <!-- Quiz ID -->
+
+                <input type="hidden"
+                       asp-for="QuizId" />
+
+
+                <!-- Question Text -->
+
+                <div class="mb-4">
+
+                    <label asp-for="QuestionText"
+                           class="form-label fw-semibold"
+                           style="color: #27272A;">
+                        Question
+                    </label>
+
+                    <textarea asp-for="QuestionText"
+                              class="form-control custom-input"
+                              rows="6"
+                              placeholder="Enter your question..."
+                              required></textarea>
+
+                    <span asp-validation-for="QuestionText"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div class="d-flex flex-column flex-sm-row
+                            justify-content-between
+                            gap-3">
+
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteQuestionModal">
+                        Delete Question
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-purple">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Answers Section -->
+
+    <div class="answers-section">
+
+        <div class="d-flex flex-column flex-md-row
+                    justify-content-between
+                    align-items-md-center
+                    gap-3 mb-4">
+
+            <div>
+
+                <div class="small fw-semibold mb-2"
+                     style="color: #7C3AED;">
+                    ANSWER MANAGEMENT
+                </div>
+
+                <h3 class="fw-bold mb-1"
+                    style="color: #18181B;">
+                    Answers
+                </h3>
+
+                <p class="mb-0"
+                   style="color: #71717A;">
+                    Add and manage the answer options for this question.
+                </p>
+
+            </div>
+
+
+            <a asp-controller="Answer"
+               asp-action="Create"
+               asp-route-questionId="@Model.QuestionId"
+               class="btn btn-purple">
+                + Add Answer
+            </a>
+
+        </div>
+
+
+        @if (Model.Answers == null || !Model.Answers.Any())
+        {
+            <!-- Empty Answers -->
+
+            <div class="empty-answers-card">
+
+                <div class="empty-icon">
+                    +
+                </div>
+
+                <h5 class="fw-bold mb-2"
+                    style="color: #18181B;">
+                    No answers yet
+                </h5>
+
+                <p class="mb-3"
+                   style="color: #71717A;">
+                    Add answer options to make this question ready for students.
+                </p>
+
+                <a asp-controller="Answer"
+                   asp-action="Create"
+                   asp-route-questionId="@Model.QuestionId"
+                   class="btn btn-purple">
+                    Add First Answer
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <!-- Answers List -->
+
+            <div class="row g-3">
+
+                @foreach (var answer in Model.Answers)
+                {
+                    <div class="col-12">
+
+                        <div class="answer-card">
+
+                            <div class="answer-content">
+
+                                <!-- Answer Icon -->
+
+                                <div class="answer-icon">
+                                    ✓
+                                </div>
+
+
+                                <!-- Answer Text -->
+
+                                <div class="answer-text">
+
+                                    <span class="fw-semibold"
+                                          style="color: #18181B;">
+                                        @answer.AnswerText
+                                    </span>
+
+                                </div>
+
+
+                                <!-- Actions -->
+
+                                <div class="answer-actions">
+
+                                    <a asp-controller="Answer"
+                                       asp-action="Edit"
+                                       asp-route-id="@answer.AnswerId"
+                                       class="btn btn-sm btn-outline-purple">
+                                        Edit
+                                    </a>
+
+                                    <form asp-controller="Answer"
+                                          asp-action="Delete"
+                                          asp-route-id="@answer.AnswerId"
+                                          method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this answer?');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- Delete Question Modal -->
+
+<div class="modal fade"
+     id="deleteQuestionModal"
+     tabindex="-1"
+     aria-labelledby="deleteQuestionModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content delete-modal">
+
+            <div class="modal-header delete-modal-header">
+
+                <h5 class="modal-title fw-bold"
+                    id="deleteQuestionModalLabel"
+                    style="color: #18181B;">
+                    Delete Question
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body p-4">
+
+                <p class="mb-2"
+                   style="color: #27272A;">
+                    Are you sure you want to delete this question?
+                </p>
+
+                <p class="small mb-0"
+                   style="color: #71717A;">
+                    This action cannot be undone.
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer"
+                 style="border-top: 1px solid #E4E4E7;">
+
+                <button type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <form asp-controller="Question"
+                      asp-action="Delete"
+                      asp-route-id="@Model.QuestionId"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Delete Question
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    body {
+        background-color: #FAF7F2;
+    }
+
+
+    /* =========================
+       Question Card
+       ========================= */
+
+    .question-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .question-card-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 24px 28px;
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .question-card-body {
+        padding: 28px;
+    }
+
+    .question-number {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 14px;
+        background-color: #7C3AED;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+
+    /* =========================
+       Input
+       ========================= */
+
+    .custom-input {
+        width: 100%;
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+        background-color: #FFFFFF;
+        color: #18181B;
+        resize: vertical;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .custom-input:focus {
+        border-color: #7C3AED;
+        box-shadow:
+            0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+        outline: none;
+    }
+
+
+    /* =========================
+       Buttons
+       ========================= */
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background-color: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        padding: 9px 20px;
+        font-weight: 600;
+    }
+
+    .btn-outline-purple:hover {
+        background-color: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-danger {
+        border-radius: 10px;
+        padding: 9px 18px;
+        font-weight: 600;
+    }
+
+    .btn-danger {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 18px;
+    }
+
+
+    /* =========================
+       Answers
+       ========================= */
+
+    .answers-section {
+        margin-top: 10px;
+    }
+
+    .answer-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 16px;
+        padding: 18px 20px;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .answer-card:hover {
+        border-color: #C4B5FD;
+        box-shadow:
+            0 6px 18px rgba(124, 58, 237, 0.08);
+    }
+
+    .answer-content {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .answer-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 12px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+
+    .answer-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .answer-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+
+    /* =========================
+       Empty Answers
+       ========================= */
+
+    .empty-answers-card {
+        background-color: #FFFFFF;
+        border: 1px dashed #D4D4D8;
+        border-radius: 20px;
+        padding: 45px 25px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 16px;
+        border-radius: 16px;
+        background-color: #EDE9FE;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+
+    /* =========================
+       Delete Modal
+       ========================= */
+
+    .delete-modal {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .delete-modal-header {
+        background-color: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .btn-light {
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 9px 18px;
+        background-color: #FFFFFF;
+        color: #27272A;
+    }
+
+    .btn-light:hover {
+        background-color: #F4F4F5;
+        border-color: #D4D4D8;
+        color: #18181B;
+    }
+
+
+    /* =========================
+       Responsive
+       ========================= */
+
+    @@media (max-width: 768px) {
+
+        .question-card-header {
+            padding: 20px;
+        }
+
+        .question-card-body {
+            padding: 20px;
+        }
+
+        .answer-content {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .answer-actions {
+            width: 100%;
+        }
+
+        .answer-actions .btn,
+        .answer-actions form {
+            flex: 1;
+        }
+
+        .answer-actions form button {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}
+

@@ -1,0 +1,125 @@
+@model IEnumerable<OnlineLearning.Business.DTOs.EnrollmentDto>
+
+@{
+    ViewData["Title"] = "My Enrollments";
+}
+
+<div class="container py-5">
+
+    <div class="mb-5">
+        <h1 class="fw-bold" style="color: #2D1B36;">
+            My Enrollments
+        </h1>
+
+        <p class="text-muted mb-0">
+            View the courses you have enrolled in and check your enrollment status.
+        </p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+
+            <div class="mb-3" style="font-size: 3rem;">
+                📚
+            </div>
+
+            <h3 class="fw-bold" style="color: #2D1B36;">
+                No enrollments yet
+            </h3>
+
+            <p class="text-muted mb-4">
+                You haven't enrolled in any courses yet.
+            </p>
+
+            <a asp-controller="Course"
+               asp-action="Index"
+               class="btn text-white px-4 py-2"
+               style="background-color: #7C3AED;">
+                Browse Courses
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var enrollment in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card h-100 border-0 shadow-sm"
+                         style="border-radius: 16px; overflow: hidden;">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                <span class="badge rounded-pill px-3 py-2"
+                                      style="
+                                          background-color: #F3E8FF;
+                                          color: #7C3AED;
+                                      ">
+                                    Enrollment #@enrollment.EnrollmentId
+                                </span>
+
+                                @if (enrollment.Status == "Active")
+                                {
+                                    <span class="badge rounded-pill px-3 py-2 bg-success">
+                                        Active
+                                    </span>
+                                }
+                                else if (enrollment.Status == "Pending")
+                                {
+                                    <span class="badge rounded-pill px-3 py-2 bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill px-3 py-2 bg-secondary">
+                                        @enrollment.Status
+                                    </span>
+                                }
+
+                            </div>
+
+                            <h5 class="fw-bold mb-3"
+                                style="color: #2D1B36;">
+                                Course #@enrollment.CourseId
+                            </h5>
+
+                            <div class="text-muted small mb-4">
+
+                                <div class="mb-2">
+                                    <strong>Enrollment Date:</strong>
+                                    @enrollment.EnrollmentDate.ToLocalTime().ToString("dd MMMM yyyy")
+                                </div>
+
+                                <div>
+                                    <strong>Status:</strong>
+                                    @enrollment.Status
+                                </div>
+
+                            </div>
+
+                            <a asp-controller="Enrollment"
+                               asp-action="Details"
+                               asp-route-id="@enrollment.EnrollmentId"
+                               class="btn w-100 text-white"
+                               style="background-color: #7C3AED;">
+                                View Enrollment
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

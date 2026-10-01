@@ -1,0 +1,197 @@
+@model OnlineLearning.Business.DTOs.CreateAnswerDto
+
+@{
+    ViewData["Title"] = "Edit Answer";
+}
+
+<div class="container py-5">
+
+    <div class="mb-5">
+
+        <div class="small fw-semibold mb-2"
+             style="color: #7C3AED;">
+            ANSWER MANAGEMENT
+        </div>
+
+        <h1 class="fw-bold mb-2"
+            style="color: #18181B;">
+            Edit Answer
+        </h1>
+
+        <p class="mb-0"
+           style="color: #71717A;">
+            Update this answer option.
+        </p>
+
+    </div>
+
+
+    <div class="card border-0 shadow-sm"
+         style="border-radius: 20px;">
+
+        <div class="card-body p-4 p-md-5">
+
+            <form asp-controller="Answer"
+                  asp-action="Edit"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-4">
+                </div>
+
+
+                <input type="hidden"
+                       asp-for="QuestionId" />
+
+
+                <div class="mb-4">
+
+                    <label asp-for="AnswerText"
+                           class="form-label fw-semibold"
+                           style="color: #27272A;">
+                        Answer
+                    </label>
+
+                    <input asp-for="AnswerText"
+                           class="form-control custom-input"
+                           placeholder="Enter answer text..." />
+
+                    <span asp-validation-for="AnswerText"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+
+                <div class="form-check mb-4">
+
+                    <input asp-for="IsCorrect"
+                           class="form-check-input"
+                           style="accent-color: #7C3AED;" />
+
+                    <label asp-for="IsCorrect"
+                           class="form-check-label fw-semibold">
+                        This is the correct answer
+                    </label>
+
+                </div>
+
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-purple">
+                        Save Changes
+                    </button>
+
+                    <a asp-controller="Question"
+                       asp-action="Edit"
+                       asp-route-id="@Model.QuestionId"
+                       class="btn btn-outline-purple">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+
+            <hr class="my-4" />
+
+
+            <form asp-controller="Answer"
+                  asp-action="Delete"
+                  asp-route-id="@ViewBag.AnswerId"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this answer?');">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        class="btn btn-outline-danger">
+                    Delete Answer
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    body {
+        background-color: #FAF7F2;
+    }
+
+    .custom-input {
+        width: 100%;
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 11px 13px;
+        background-color: #FFFFFF;
+        color: #18181B;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .custom-input:focus {
+        border-color: #7C3AED;
+        box-shadow:
+            0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+        outline: none;
+    }
+
+    .btn-purple {
+        background-color: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-purple:hover {
+        background-color: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-purple {
+        background-color: #FFFFFF;
+        border: 1px solid #7C3AED;
+        color: #7C3AED;
+        border-radius: 10px;
+        padding: 9px 20px;
+        font-weight: 600;
+    }
+
+    .btn-outline-purple:hover {
+        background-color: #7C3AED;
+        border-color: #7C3AED;
+        color: #FFFFFF;
+    }
+
+    .btn-outline-danger {
+        border-radius: 10px;
+        padding: 9px 18px;
+        font-weight: 600;
+    }
+
+</style>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+
+}

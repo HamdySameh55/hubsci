@@ -1,0 +1,174 @@
+@model IEnumerable<OnlineLearning.Business.DTOs.FeedbackDto>
+
+@{
+    ViewData["Title"] = "Student Feedback";
+}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="fw-bold mb-1" style="color: #18181B;">
+                Student Feedback
+            </h1>
+
+            <p class="mb-0" style="color: #71717A;">
+                Review all feedback submitted by students across the platform.
+            </p>
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Dashboard"
+           class="btn"
+           style="
+               background-color: #EDE9FE;
+               color: #5B21B6;
+               border: 1px solid #DDD6FE;
+           ">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- Success Message -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+
+    <!-- Error Message -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+
+            <div class="mb-3"
+                 style="
+                     width: 60px;
+                     height: 60px;
+                     margin: 0 auto;
+                     border-radius: 50%;
+                     background-color: #EDE9FE;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     color: #7C3AED;
+                     font-size: 24px;
+                 ">
+                💬
+            </div>
+
+            <h5 class="fw-bold" style="color: #18181B;">
+                No Feedback Found
+            </h5>
+
+            <p class="mb-0" style="color: #71717A;">
+                Students have not submitted any feedback yet.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var feedback in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card border-0 shadow-sm h-100"
+                         style="border-radius: 16px; background-color: #FFFFFF;">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between
+                                        align-items-start gap-3 mb-3">
+
+                                <div>
+                                    <div class="small"
+                                         style="color: #71717A;">
+                                        Student
+                                    </div>
+
+                                    <div class="fw-bold"
+                                         style="color: #18181B;">
+                                        @feedback.StudentName
+                                    </div>
+                                </div>
+
+                                <span class="badge rounded-pill"
+                                      style="
+                                          background-color: #EDE9FE;
+                                          color: #5B21B6;
+                                      ">
+                                    @feedback.Status
+                                </span>
+
+                            </div>
+
+                            <div class="small mb-1"
+                                 style="color: #71717A;">
+                                Course
+                            </div>
+
+                            <div class="fw-bold mb-3"
+                                 style="color: #18181B;">
+                                @feedback.CourseTitle
+                            </div>
+
+                            @if (feedback.Rating > 0)
+                            {
+                                <div class="small mb-1"
+                                     style="color: #71717A;">
+                                    Rating
+                                </div>
+
+                                <div class="fw-bold mb-3"
+                                     style="color: #18181B;">
+                                    @feedback.Rating / 5
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(feedback.Comment))
+                            {
+                                <div class="small mb-1"
+                                     style="color: #71717A;">
+                                    Comment
+                                </div>
+
+                                <p class="mb-3"
+                                   style="color: #27272A; line-height: 1.6;">
+                                    @feedback.Comment
+                                </p>
+                            }
+
+                            <div class="small"
+                                 style="color: #71717A;">
+                                Submitted:
+                                @feedback.CreatedAt.ToLocalTime().ToString("dd MMMM yyyy")
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

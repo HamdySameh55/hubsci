@@ -1,0 +1,647 @@
+@model OnlineLearning.Business.DTOs.LessonDto
+@using Microsoft.AspNetCore.WebUtilities
+
+@{
+    ViewData["Title"] = Model.Title;
+
+    var contentType = Model.ContentType?.Trim().ToLowerInvariant() ?? "";
+    var contentUrl = Model.ContentUrl?.Trim() ?? "";
+
+    bool isYouTube =
+        contentType == "video" &&
+        (contentUrl.Contains("youtube.com/watch", StringComparison.OrdinalIgnoreCase) ||
+         contentUrl.Contains("youtu.be/", StringComparison.OrdinalIgnoreCase));
+
+    bool isGoogleDrive =
+        contentType == "pdf" &&
+        contentUrl.Contains("drive.google.com", StringComparison.OrdinalIgnoreCase);
+
+    bool isPdf =
+        contentType == "pdf" &&
+        !isGoogleDrive;
+
+    bool isZoom =
+        contentType == "zoom" ||
+        contentType == "zoom meeting";
+
+    bool isExternal =
+        contentType == "external" ||
+        contentType == "external link";
+
+    string? youtubeEmbedUrl = null;
+
+    if (isYouTube &&
+        Uri.TryCreate(contentUrl, UriKind.Absolute, out var youtubeUri))
+    {
+        if (youtubeUri.Host.Contains(
+            "youtu.be",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            var videoId =
+                youtubeUri.AbsolutePath.Trim('/');
+
+            if (!string.IsNullOrWhiteSpace(videoId))
+            {
+                youtubeEmbedUrl =
+                    $"https://www.youtube.com/embed/{videoId}";
+            }
+        }
+        else
+        {
+            var query =
+                QueryHelpers.ParseQuery(youtubeUri.Query);
+
+            if (query.TryGetValue("v", out var videoId))
+            {
+                youtubeEmbedUrl =
+                    $"https://www.youtube.com/embed/{videoId}";
+            }
+        }
+    }
+
+    string? googleDriveEmbedUrl = null;
+
+    if (isGoogleDrive &&
+        Uri.TryCreate(
+            contentUrl,
+            UriKind.Absolute,
+            out var driveUri))
+    {
+        var path = driveUri.AbsolutePath;
+
+        const string fileMarker = "/file/d/";
+
+        var fileIndex =
+            path.IndexOf(
+                fileMarker,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (fileIndex >= 0)
+        {
+            var startIndex =
+                fileIndex + fileMarker.Length;
+
+            var endIndex =
+                path.IndexOf(
+                    '/',
+                    startIndex);
+
+            var fileId =
+                endIndex >= 0
+                    ? path[startIndex..endIndex]
+                    : path[startIndex..];
+
+            if (!string.IsNullOrWhiteSpace(fileId))
+            {
+                googleDriveEmbedUrl =
+                    $"https://drive.google.com/file/d/{fileId}/preview";
+            }
+        }
+    }
+}
+
+<style>
+
+    .lesson-page {
+        background: #FAF7F2;
+        min-height: 100vh;
+    }
+
+    .lesson-card {
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 22px;
+        overflow: hidden;
+    }
+
+    .lesson-header {
+        background: #EDE9FE;
+        border-bottom: 1px solid #DDD6FE;
+    }
+
+    .lesson-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: #FFFFFF;
+        color: #5B21B6;
+        border: 1px solid #DDD6FE;
+        border-radius: 999px;
+        padding: 7px 13px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .lesson-title {
+        color: #18181B;
+        font-size: 34px;
+        line-height: 1.2;
+    }
+
+    .lesson-description {
+        color: #52525B;
+        line-height: 1.8;
+        font-size: 16px;
+    }
+
+    .content-section {
+        margin-top: 28px;
+    }
+
+    .content-label {
+        color: #71717A;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        margin-bottom: 10px;
+    }
+
+    .viewer {
+        background: #18181B;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid #E4E4E7;
+    }
+
+    .video-viewer iframe {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        display: block;
+        border: 0;
+    }
+
+    .pdf-viewer iframe {
+        width: 100%;
+        height: 720px;
+        display: block;
+        border: 0;
+        background: #FFFFFF;
+    }
+
+    .meeting-card {
+        background: #F5F3FF;
+        border: 1px solid #DDD6FE;
+        border-radius: 18px;
+        padding: 28px;
+    }
+
+    .meeting-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: #FFFFFF;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        border: 1px solid #DDD6FE;
+    }
+
+    .meeting-title {
+        color: #18181B;
+        font-weight: 700;
+    }
+
+    .meeting-text {
+        color: #71717A;
+        margin-bottom: 0;
+    }
+
+    .external-card {
+        background: #F4F4F5;
+        border: 1px solid #E4E4E7;
+        border-radius: 18px;
+        padding: 28px;
+    }
+
+    .external-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: #FFFFFF;
+        color: #7C3AED;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        border: 1px solid #E4E4E7;
+    }
+
+    .content-error {
+        background: #FEF2F2;
+        border: 1px solid #FECACA;
+        color: #991B1B;
+        border-radius: 16px;
+        padding: 20px;
+    }
+
+    .action-area {
+        border-top: 1px solid #E4E4E7;
+        margin-top: 32px;
+        padding-top: 24px;
+    }
+
+    .btn-purple {
+        background: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+        text-decoration: none;
+    }
+
+    .btn-purple:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    .btn-edit {
+        background: #FFF7ED;
+        border: 1px solid #FED7AA;
+        color: #EA580C;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover {
+        background: #FFEDD5;
+        border-color: #FDBA74;
+        color: #C2410C;
+    }
+
+    .btn-complete {
+        background: #16A34A;
+        border: 1px solid #16A34A;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+    .btn-complete:hover {
+        background: #15803D;
+        border-color: #15803D;
+        color: #FFFFFF;
+    }
+
+    .btn-complete:disabled {
+        opacity: .85;
+        cursor: not-allowed;
+    }
+
+    .btn-meeting {
+        display: inline-block;
+        background: #7C3AED;
+        border: 1px solid #7C3AED;
+        color: #FFFFFF;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 11px 20px;
+        text-decoration: none;
+    }
+
+    .btn-meeting:hover {
+        background: #5B21B6;
+        border-color: #5B21B6;
+        color: #FFFFFF;
+    }
+
+    @@media (max-width: 768px) {
+
+        .lesson-title {
+            font-size: 28px;
+        }
+
+        .pdf-viewer iframe {
+            height: 550px;
+        }
+
+        .meeting-card,
+        .external-card {
+            padding: 22px;
+        }
+
+    }
+
+</style>
+
+<div class="lesson-page py-5">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-lg-9">
+
+                <div class="lesson-card shadow-sm">
+
+                    <!-- Header -->
+
+                    <div class="lesson-header p-4 p-md-5">
+
+                        <div class="lesson-type mb-3">
+
+                            @if (contentType == "video")
+                            {
+                                <span>▶</span>
+                                <span>Video Lesson</span>
+                            }
+                            else if (contentType == "pdf")
+                            {
+                                <span>▣</span>
+                                <span>PDF Document</span>
+                            }
+                            else if (isZoom)
+                            {
+                                <span>●</span>
+                                <span>Live Meeting</span>
+                            }
+                            else
+                            {
+                                <span>↗</span>
+                                <span>External Content</span>
+                            }
+
+                        </div>
+
+                        <h1 class="lesson-title fw-bold mb-3">
+                            @Model.Title
+                        </h1>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Description))
+                        {
+                            <p class="lesson-description mb-0">
+                                @Model.Description
+                            </p>
+                        }
+
+                    </div>
+
+                    <!-- Content -->
+
+                    <div class="p-4 p-md-5">
+
+                        @if (isYouTube &&
+                             !string.IsNullOrWhiteSpace(youtubeEmbedUrl))
+                        {
+                            <div class="content-section">
+
+                                <div class="content-label">
+                                    Video
+                                </div>
+
+                                <div class="viewer video-viewer">
+
+                                    <iframe
+                                        src="@youtubeEmbedUrl"
+                                        title="@Model.Title"
+                                        loading="lazy"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen>
+                                    </iframe>
+
+                                </div>
+
+                            </div>
+                        }
+
+                        else if (isGoogleDrive &&
+                                 !string.IsNullOrWhiteSpace(googleDriveEmbedUrl))
+                        {
+                            <div class="content-section">
+
+                                <div class="content-label">
+                                    PDF
+                                </div>
+
+                                <div class="viewer pdf-viewer">
+
+                                    <iframe
+                                        src="@googleDriveEmbedUrl"
+                                        title="@Model.Title"
+                                        loading="lazy">
+                                    </iframe>
+
+                                </div>
+
+                            </div>
+                        }
+
+                        else if (isPdf)
+                        {
+                            <div class="content-section">
+
+                                <div class="content-label">
+                                    PDF
+                                </div>
+
+                                <div class="viewer pdf-viewer">
+
+                                    <iframe
+                                        src="@contentUrl"
+                                        title="@Model.Title"
+                                        loading="lazy">
+                                    </iframe>
+
+                                </div>
+
+                            </div>
+                        }
+
+                        else if (isZoom)
+                        {
+                            <div class="content-section">
+
+                                <div class="meeting-card">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="meeting-icon">
+                                            ●
+                                        </div>
+
+                                        <div>
+
+                                            <h5 class="meeting-title mb-1">
+                                                Live Meeting
+                                            </h5>
+
+                                            <p class="meeting-text">
+                                                Join the scheduled online class.
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mt-4">
+
+                                        <a href="@contentUrl"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="btn-meeting">
+                                            Join Meeting ↗
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                        else if (isExternal)
+                        {
+                            <div class="content-section">
+
+                                <div class="external-card">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="external-icon">
+                                            ↗
+                                        </div>
+
+                                        <div>
+
+                                            <h5 class="fw-bold mb-1"
+                                                style="color:#18181B;">
+                                                External Content
+                                            </h5>
+
+                                            <p class="mb-0"
+                                               style="color:#71717A;">
+                                                Open the external resource to continue this lesson.
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mt-4">
+
+                                        <a href="@contentUrl"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="btn-purple">
+                                            Open Content ↗
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                        else if (!string.IsNullOrWhiteSpace(contentUrl))
+                        {
+                            <div class="content-error">
+
+                                <strong>
+                                    This content could not be displayed.
+                                </strong>
+
+                                <div class="mt-2">
+                                    Please contact the instructor or try opening the lesson again.
+                                </div>
+
+                            </div>
+                        }
+
+                        else
+                        {
+                            <div class="content-error">
+
+                                <strong>
+                                    No content is available for this lesson.
+                                </strong>
+
+                            </div>
+                        }
+
+                        <!-- Actions -->
+
+                        <div class="action-area">
+
+                            <div class="d-flex flex-column flex-sm-row gap-2">
+
+                                <!-- Back -->
+
+                                <a asp-controller="Module"
+                                   asp-action="Details"
+                                   asp-route-id="@Model.ModuleId"
+                                   class="btn-purple">
+                                    ← Back to Module
+                                </a>
+
+                                <!-- Student -->
+
+                                @if (User.IsInRole("Student"))
+                                {
+                                    @if (ViewBag.IsCompleted == true)
+                                    {
+                                        <button type="button"
+                                                class="btn-complete"
+                                                disabled>
+                                            ✓ Completed
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="LessonProgress"
+                                              asp-action="Create"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="EnrollmentId"
+                                                   value="@ViewBag.EnrollmentId" />
+
+                                            <input type="hidden"
+                                                   name="LessonId"
+                                                   value="@Model.LessonId" />
+
+                                            <button type="submit"
+                                                    class="btn-complete">
+                                                ✓ Mark as Completed
+                                            </button>
+
+                                        </form>
+                                    }
+                                }
+
+                                <!-- Instructor -->
+
+                                @if (User.IsInRole("Instructor"))
+                                {
+                                    <a asp-action="Edit"
+                                       asp-route-id="@Model.LessonId"
+                                       class="btn-edit">
+                                        Edit Lesson
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
